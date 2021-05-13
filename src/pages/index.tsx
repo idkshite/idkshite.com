@@ -3,6 +3,7 @@ import BasicMeta from "../components/meta/BasicMeta";
 import OpenGraphMeta from "../components/meta/OpenGraphMeta";
 import TwitterCardMeta from "../components/meta/TwitterCardMeta";
 import { SocialList } from "../components/SocialList";
+import Logo from "../assets/idkshite-logo.svg";
 
 export default function Index() {
   return (
@@ -12,6 +13,7 @@ export default function Index() {
       <TwitterCardMeta url={"/"} />
       <div className="container">
         <div>
+            <Logo></Logo>
           <h1>
             Hi, We're Next.js & Netlify<span className="fancy">.</span>
           </h1>
