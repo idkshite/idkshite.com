@@ -11,3 +11,7 @@ tags:
     name: mdx
   - slug: markdown
     name: markdown
+  - slug: ts
+    name: typescript
+  - slug: learn
+    name: learning
