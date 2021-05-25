@@ -7,6 +7,13 @@ export const FONT_SIZE = {
   BODY4: 22.5,
 };
 
+export const FONT_WEIGHT = {
+  REGULAR: 400,
+  MEDIUM: 500,
+  SEMIBOLD: 600,
+  BOLD: 700,
+};
+
 export const LINE_HEIGHT = {
   BODY: 40,
   TITLE: 30,

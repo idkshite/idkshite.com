@@ -1,0 +1,6 @@
+export const COLOR = {
+  DEFAULT_TEXT: "#232323",
+  DEFAULT_TITLE: "#4B4A4A",
+  SUBTLE_LABEL: "#CDCDCD",
+  VERY_SUBTLE_LABEL: "#ededed",
+};
