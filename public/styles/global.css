@@ -4,9 +4,12 @@
 html,
 body {
   font-family: "Jost", sans-serif;
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+
   background-color: #fff;
   color: #222;
-  font-weight: 200;
+  font-weight: 400;
   height: 100%;
 }
 
