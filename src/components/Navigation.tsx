@@ -64,7 +64,7 @@ export default function Navigation() {
             }
             li {
               margin-bottom: ${VERTICAL_MARGIN.QUARTER}px;
-              font-size: ${FONT_SIZE.SMALL_TITLE2}px;
+              font-size: ${FONT_SIZE.TITLE2}px;
               font-weight: ${FONT_WEIGHT.REGULAR};
               color: ${COLOR.DEFAULT_TITLE};
               padding: 0 1.5rem 0 0;
@@ -91,6 +91,7 @@ export default function Navigation() {
               }
               li {
                 padding: 0;
+                font-size: ${FONT_SIZE.SMALL_TITLE2}px;
               }
             }
           `}
