@@ -1,6 +1,7 @@
 import React from "react";
 import {
   FONT_SIZE,
+  FONT_STYLE,
   FONT_WEIGHT,
   LINE_HEIGHT,
   VERTICAL_MARGIN,
@@ -10,6 +11,7 @@ import { COLOR } from "../../public/styles/colors";
 type Props = {
   children: React.ReactNode;
 };
+
 export default function PostContent({ children }: Props) {
   return (
     <React.Fragment>
@@ -23,10 +25,7 @@ export default function PostContent({ children }: Props) {
         }
 
         .content p {
-          font-size: ${FONT_SIZE.BODY4}px;
-          line-height: ${LINE_HEIGHT.BODY}px;
-          margin-bottom: ${VERTICAL_MARGIN.DEFAULT}px;
-          font-weight: ${FONT_WEIGHT.REGULAR};
+          ${FONT_STYLE.BODY4}
         }
 
         .content a {
@@ -35,43 +34,23 @@ export default function PostContent({ children }: Props) {
         }
 
         .content h1 {
-          font-size: ${FONT_SIZE.TITLE2}px;
-          font-weight: ${FONT_WEIGHT.BOLD};
-          margin-bottom: ${VERTICAL_MARGIN.HALF}px;
-          line-height: ${LINE_HEIGHT.TITLE}px;
-          color: ${COLOR.DEFAULT_TITLE};
+          ${FONT_STYLE.TITLE2}
         }
 
         .content h2 {
-          font-size: ${FONT_SIZE.TITLE1}px;
-          font-weight: ${FONT_WEIGHT.BOLD};
-          margin-bottom: ${VERTICAL_MARGIN.HALF}px;
-          line-height: ${LINE_HEIGHT.TITLE}px;
-          color: ${COLOR.DEFAULT_TITLE};
+          ${FONT_STYLE.TITLE1}
         }
 
         .content h3 {
-          font-size: ${FONT_SIZE.SMALL_TITLE1}px;
-          font-weight: ${FONT_WEIGHT.SEMIBOLD};
-          margin-bottom: ${VERTICAL_MARGIN.HALF}px;
-          line-height: ${LINE_HEIGHT.TITLE}px;
-          color: ${COLOR.DEFAULT_TITLE};
+          ${FONT_STYLE.SMALL_TITLE1}
         }
 
         .content h4 {
-          font-size: ${FONT_SIZE.SMALL_TITLE2}px;
-          font-weight: ${FONT_WEIGHT.SEMIBOLD};
-          margin-bottom: ${VERTICAL_MARGIN.HALF}px;
-          line-height: ${LINE_HEIGHT.TITLE}px;
-          color: ${COLOR.DEFAULT_TITLE};
+          ${FONT_STYLE.SMALL_TITLE2}
         }
 
         .content h5 {
-          font-size: ${FONT_SIZE.SMALL_TITLE3}px;
-          font-weight: ${FONT_WEIGHT.MEDIUM};
-          margin-bottom: ${VERTICAL_MARGIN.HALF}px;
-          line-height: ${LINE_HEIGHT.TITLE}px;
-          color: ${COLOR.DEFAULT_TITLE};
+          ${FONT_STYLE.SMALL_TITLE3}
         }
 
         .content pre {

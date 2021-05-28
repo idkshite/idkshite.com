@@ -62,28 +62,22 @@ export default function PostLayout({
       <div className={"container"}>
         <article>
           <header>
-            <h1>{title}</h1>
-            <div className={"metadata"}>
-              <div>
-                <Date date={date} />
-              </div>
-              <div>
-                <Author author={getAuthor(author)} />
-              </div>
-            </div>
+            <h1 className={"title2"}>{title}</h1>
           </header>
           <PostContent>{children}</PostContent>
-          <ul className={"tag-list"}>
-            {tags.map((it, i) => (
-              <li key={i}>
-                <TagButton tag={getTag(it)} />
-              </li>
-            ))}
-          </ul>
         </article>
         <footer>
-          <div className={"social-list"}>
-            <SocialList />
+          <div className={"metadata"}>
+            <div>
+              <Date date={date} />
+            </div>
+            <ul className={"tag-list"}>
+              {tags.map((it, i) => (
+                <li key={i}>
+                  <TagButton tag={getTag(it)} />
+                </li>
+              ))}
+            </ul>
           </div>
           <Copyright />
         </footer>
@@ -99,21 +93,17 @@ export default function PostLayout({
             box-sizing: border-box;
             z-index: 0;
           }
-          .metadata div {
-            display: inline-block;
-            margin-right: 0.5rem;
+          .metadata {
+            display: flex;
+            align-content: space-between;
           }
           article {
             flex: 1 0 auto;
           }
-          h1 {
-            margin: 0 0 0.5rem;
-            font-size: 2.25rem;
-          }
           .tag-list {
             list-style: none;
             text-align: right;
-            margin: 1.75rem 0 0 0;
+            margin: 0 0 0 auto;
             padding: 0;
           }
           .tag-list li {
