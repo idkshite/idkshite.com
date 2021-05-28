@@ -2,6 +2,13 @@ import Link from "next/link";
 import { useRouter } from "next/router";
 import Burger from "./Burger";
 import { useState } from "react";
+import { COLOR } from "../../public/styles/colors";
+import {
+  FONT_SIZE,
+  FONT_STYLE,
+  FONT_WEIGHT,
+  VERTICAL_MARGIN,
+} from "../../public/styles/font";
 
 export default function Navigation() {
   const router = useRouter();
@@ -56,15 +63,18 @@ export default function Navigation() {
               transform: translateY(0);
             }
             li {
-              margin-bottom: 1.75rem;
-              font-size: 2rem;
+              margin-bottom: ${VERTICAL_MARGIN.QUARTER}px;
+              font-size: ${FONT_SIZE.SMALL_TITLE2}px;
+              font-weight: ${FONT_WEIGHT.REGULAR};
+              color: ${COLOR.DEFAULT_TITLE};
               padding: 0 1.5rem 0 0;
             }
             li:last-child {
               margin-bottom: 0;
             }
             .active {
-              color: #222;
+              color: ${COLOR.DEFAULT_TEXT};
+              font-weight: ${FONT_WEIGHT.BOLD};
             }
 
             @media (min-width: 769px) {
@@ -80,7 +90,6 @@ export default function Navigation() {
                 transform: translateY(0);
               }
               li {
-                font-size: 1rem;
                 padding: 0;
               }
             }

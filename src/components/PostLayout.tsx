@@ -12,9 +12,12 @@ import TagButton from "./TagButton";
 import { getAuthor } from "../lib/authors";
 import { getTag } from "../lib/tags";
 import PostContent from "./PostContent";
+import { COLOR } from "../../public/styles/colors";
+import { LINE_HEIGHT, VERTICAL_MARGIN } from "../../public/styles/font";
 
 type Props = {
   title: string;
+  subtitle?: string;
   date: Date;
   slug: string;
   tags: string[];
@@ -24,6 +27,7 @@ type Props = {
 };
 export default function PostLayout({
   title,
+  subtitle,
   date,
   slug,
   author,
@@ -62,15 +66,16 @@ export default function PostLayout({
       <div className={"container"}>
         <article>
           <header>
-            <h1 className={"title2"}>{title}</h1>
+            <h3 className={"small-title3 tagline-title"}>
+              I don't know shite about:
+            </h3>
+            <h1 className={"title2 post-title"}>{title}</h1>
+            <h2 className={"small-title1 post-subtitle"}>{subtitle}</h2>
           </header>
           <PostContent>{children}</PostContent>
         </article>
         <footer>
           <div className={"metadata"}>
-            <div>
-              <Date date={date} />
-            </div>
             <ul className={"tag-list"}>
               {tags.map((it, i) => (
                 <li key={i}>
@@ -78,6 +83,9 @@ export default function PostLayout({
                 </li>
               ))}
             </ul>
+            <div>
+              <Date date={date} />
+            </div>
           </div>
           <Copyright />
         </footer>
@@ -100,10 +108,22 @@ export default function PostLayout({
           article {
             flex: 1 0 auto;
           }
+          .post-title {
+            margin-bottom: 5px;
+          }
+          .post-subtitle {
+            color: ${COLOR.DEFAULT_TITLE};
+            margin-bottom: ${VERTICAL_MARGIN.DEFAULT}px;
+          }
+          .tagline-title {
+            color: ${COLOR.SUBTLE_LABEL};
+            line-height: ${LINE_HEIGHT.DENSE}px;
+            margin-bottom: 0;
+          }
           .tag-list {
             list-style: none;
             text-align: right;
-            margin: 0 0 0 auto;
+            margin: 0 auto 0 0;
             padding: 0;
           }
           .tag-list li {

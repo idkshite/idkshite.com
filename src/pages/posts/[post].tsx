@@ -6,7 +6,7 @@ import matter from "gray-matter";
 import { fetchPostContent } from "../../lib/posts";
 import fs from "fs";
 import yaml from "js-yaml";
-import { parseISO } from 'date-fns';
+import { parseISO } from "date-fns";
 import PostLayout from "../../components/PostLayout";
 
 import YouTube from "react-youtube";
@@ -14,6 +14,7 @@ import { TwitterTweetEmbed } from "react-twitter-embed";
 
 export type Props = {
   title: string;
+  subtitle?: string;
   dateString: string;
   slug: string;
   tags: string[];
@@ -23,14 +24,15 @@ export type Props = {
 };
 
 const components = { YouTube, TwitterTweetEmbed };
-const slugToPostContent = (postContents => {
-  let hash = {}
-  postContents.forEach(it => hash[it.slug] = it)
+const slugToPostContent = ((postContents) => {
+  let hash = {};
+  postContents.forEach((it) => (hash[it.slug] = it));
   return hash;
 })(fetchPostContent());
 
 export default function Post({
   title,
+  subtitle,
   dateString,
   slug,
   tags,
@@ -38,10 +40,11 @@ export default function Post({
   description = "",
   source,
 }: Props) {
-  const content = hydrate(source, { components })
+  const content = hydrate(source, { components });
   return (
     <PostLayout
       title={title}
+      subtitle={subtitle}
       date={parseISO(dateString)}
       slug={slug}
       tags={tags}
@@ -50,11 +53,11 @@ export default function Post({
     >
       {content}
     </PostLayout>
-  )
+  );
 }
 
 export const getStaticPaths: GetStaticPaths = async () => {
-  const paths = fetchPostContent().map(it => "/posts/" + it.slug);
+  const paths = fetchPostContent().map((it) => "/posts/" + it.slug);
   return {
     paths,
     fallback: false,
@@ -65,19 +68,21 @@ export const getStaticProps: GetStaticProps = async ({ params }) => {
   const slug = params.post as string;
   const source = fs.readFileSync(slugToPostContent[slug].fullPath, "utf8");
   const { content, data } = matter(source, {
-    engines: { yaml: (s) => yaml.load(s, { schema: yaml.JSON_SCHEMA }) as object }
+    engines: {
+      yaml: (s) => yaml.load(s, { schema: yaml.JSON_SCHEMA }) as object,
+    },
   });
   const mdxSource = await renderToString(content, { components, scope: data });
   return {
     props: {
       title: data.title,
+      subtitle: data.subtitle ?? "",
       dateString: data.date,
       slug: data.slug,
       description: "",
       tags: data.tags,
       author: data.author,
-      source: mdxSource
+      source: mdxSource,
     },
   };
 };
-
