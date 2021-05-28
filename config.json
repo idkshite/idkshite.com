@@ -1,19 +1,19 @@
 {
-  "base_url": "https://wutali-nextjs-netlify-blog.netlify.app",
-  "site_title": "Next.js Netlify Blog",
-  "site_description": "Next.js blog template for Netlify",
+  "base_url": "https://idontknowshite.com/",
+  "site_title": "I don't know shite | Blog",
+  "site_description": "Learn some shite with me",
   "site_keywords": [
     {
-      "keyword": "Next.js"
+      "keyword": "Learning"
     },
     {
-      "keyword": "Netlify"
+      "keyword": "Public Learning"
     },
     {
-      "keyword": "React"
+      "keyword": "Blog"
     }
   ],
   "posts_per_page": 5,
-  "twitter_account": "@my-account",
-  "github_account": "wutali"
+  "twitter_account": "@data_deer",
+  "github_account": "datadeer"
 }

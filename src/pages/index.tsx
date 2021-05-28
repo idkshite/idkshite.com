@@ -39,6 +39,7 @@ export default function Index({ posts, tags, pagination }) {
             .logo {
               margin-bottom: ${VERTICAL_MARGIN.DEFAULT}px;
               max-width: 300px;
+              min-width: 100px;
             }
             .title {
               margin-bottom: ${VERTICAL_MARGIN.DEFAULT}px;
