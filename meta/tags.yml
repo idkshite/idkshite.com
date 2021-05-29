@@ -13,5 +13,7 @@ tags:
     name: markdown
   - slug: ts
     name: typescript
-  - slug: learn
-    name: learning
+  - slug: german
+    name: german
+  - slug: meta-learning
+    name: meta-learning
