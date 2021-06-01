@@ -11,6 +11,8 @@ import PostLayout from "../../components/PostLayout";
 
 import YouTube from "react-youtube";
 import { TwitterTweetEmbed } from "react-twitter-embed";
+import { CodeSandbox } from "../../components/rich-content/CodeSandbox";
+import { Replit } from "../../components/rich-content/Replit";
 
 export type Props = {
   title: string;
@@ -23,7 +25,7 @@ export type Props = {
   source: MdxRemote.Source;
 };
 
-const components = { YouTube, TwitterTweetEmbed };
+const components = { YouTube, TwitterTweetEmbed, CodeSandbox, Replit };
 const slugToPostContent = ((postContents) => {
   let hash = {};
   postContents.forEach((it) => (hash[it.slug] = it));
