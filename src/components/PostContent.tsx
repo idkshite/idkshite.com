@@ -123,6 +123,8 @@ export default function PostContent({ children }: Props) {
         .content ol li,
         .content ul li {
           line-height: ${LINE_HEIGHT.BODY}px;
+          font-size: ${FONT_SIZE.BODY4}px;
+          margin-bottom: ${VERTICAL_MARGIN.QUARTER}px;
         }
 
         .content li ol,

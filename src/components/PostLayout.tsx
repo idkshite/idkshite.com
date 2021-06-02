@@ -118,7 +118,7 @@ export default function PostLayout({
           .tagline-title {
             color: ${COLOR.SUBTLE_LABEL};
             line-height: ${LINE_HEIGHT.DENSE}px;
-            margin-bottom: 0;
+            margin-bottom: ${VERTICAL_MARGIN.QUARTER}px;
           }
           .tag-list {
             list-style: none;
