@@ -1,11 +1,17 @@
+import { FONT_SIZE, VERTICAL_MARGIN } from "../../public/styles/font";
+import { COLOR } from "../../public/styles/colors";
+
 export default function Copyright() {
   return (
     <>
-      <p>&copy; 2020</p>
+      <p>share what you learned 🥳</p>
       <style jsx>
         {`
           p {
-            font-size: 0.75rem;
+            opacity: 0.6;
+            margin-top: ${VERTICAL_MARGIN.DEFAULT}px;
+            font-size: ${FONT_SIZE.BODY2}px;
+            color: ${COLOR.DEFAULT_TITLE};
             text-align: center;
           }
         `}

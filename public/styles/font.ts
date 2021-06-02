@@ -5,8 +5,11 @@ export const FONT_SIZE = {
   TITLE1: 28.1,
   SMALL_TITLE1: 22,
   SMALL_TITLE2: 18,
-  SMALL_TITLE3: 14,
+  SMALL_TITLE3: 14.4,
   BODY4: 22.5,
+  BODY3: 18,
+  BODY2: 14.4,
+  BODY1: 11.52,
 };
 
 export const FONT_WEIGHT = {
