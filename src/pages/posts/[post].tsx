@@ -13,6 +13,8 @@ import YouTube from "react-youtube";
 import { TwitterTweetEmbed } from "react-twitter-embed";
 import { CodeSandbox } from "../../components/rich-content/CodeSandbox";
 import { Replit } from "../../components/rich-content/Replit";
+import { Imgur } from "../../components/rich-content/Image";
+import { ImgWithText } from "../../components/rich-content/ImageWithText";
 
 export type Props = {
   title: string;
@@ -25,7 +27,14 @@ export type Props = {
   source: MdxRemote.Source;
 };
 
-const components = { YouTube, TwitterTweetEmbed, CodeSandbox, Replit };
+const components = {
+  YouTube,
+  TwitterTweetEmbed,
+  CodeSandbox,
+  Replit,
+  Imgur,
+  ImgWithText,
+};
 const slugToPostContent = ((postContents) => {
   let hash = {};
   postContents.forEach((it) => (hash[it.slug] = it));
