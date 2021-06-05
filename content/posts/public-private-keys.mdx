@@ -41,7 +41,7 @@ You want to send your *"guilty pleasure playlist"* to your friend Mathilda, but 
 To protect the `message`, you encrypt it with your friends `public key`. Now the `message` can only be decrypted with her `private key`. So only she can read it. Profit!
 
 ### Interactive node.js message encryption
-<Replit url="https://replit.com/@idkshite/private-public-keys" filename={"index.js"}/>
+<Replit url="https://replit.com/@idkshite/encryption" filename={"index.js"}/>
 
 # Verify message integrity
 There is only one problem with this example. If someone interferes with the transmission between you and Mathilda, they can create a new `message` with Mathilda's `public key` and pretend it is coming from you. What if they add your least favourite song to the playlist? Mathilda will never talk to you again if she finds out you listen to Wham!(I hope you your friends aren't that judgemental)
@@ -50,7 +50,7 @@ But fortunately, your keys can also help you with this challenge.
 You remember you're the only person with your `private key`? We can use this to our advantage and encrypt your playlist with your `private key`. This won't prevent anyone from reading it. But Mathilda can now be sure the `message` is coming from you because she can decrypt it with your `public key`. If this is not possible anymore, the `message` has been tampered with.
 
 ### Interactive node.js message verification
-<Replit url="https://replit.com/@idkshite/private-public-keys-1" filename={"index.js"}/>
+<Replit url="https://replit.com/@idkshite/verify-message-integrity" filename={"index.js"}/>
 
 There is also a way to combine those two methods to protect the `message` from prying eyes and verify `message` integrity. But this a story for another post in the future.
 
