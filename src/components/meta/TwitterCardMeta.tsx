@@ -20,6 +20,10 @@ export default function TwitterCardMeta({ url, title, description }: Props) {
         property="twitter:description"
         content={description ? description : config.site_description}
       />
+      <meta
+        property="twitter:image"
+        content={"https://i.imgur.com/PZEpnPr.png"}
+      />
     </Head>
   );
 }

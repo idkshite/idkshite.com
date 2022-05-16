@@ -1,0 +1,16 @@
+diff --git a/node_modules/next-images/index.d.ts b/node_modules/next-images/index.d.ts
+index 3298a4b..d295e61 100644
+--- a/node_modules/next-images/index.d.ts
++++ b/node_modules/next-images/index.d.ts
+@@ -13,11 +13,6 @@ declare module "*.png" {
+   export = value;
+ }
+ 
+-declare module "*.svg" {
+-  const value: string;
+-  export = value;
+-}
+-
+ declare module "*.gif" {
+   const value: string;
+   export = value;
