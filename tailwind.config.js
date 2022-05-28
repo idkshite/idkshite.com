@@ -8,6 +8,7 @@ module.exports = {
       'body':  ['Jost',"sans-serif"],
     },
     spacing: {
+      "small": "4px",
       1: "8px",
       2: "16px",
       3: "24px",
