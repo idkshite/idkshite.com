@@ -1,7 +1,5 @@
 import { Imgur } from "./Image";
 import { FONT_STYLE, VERTICAL_MARGIN } from "../../../public/styles/font";
-import renderToString from "next-mdx-remote/render-to-string";
-import hydrate from "next-mdx-remote/hydrate";
 
 export function ImgWithText({
   className,
