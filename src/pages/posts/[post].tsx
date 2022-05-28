@@ -1,5 +1,4 @@
 import { GetStaticProps, GetStaticPaths } from "next";
-import {serialize} from "next-mdx-remote/serialize";
 import { MDXRemote } from 'next-mdx-remote'
 import matter from "gray-matter";
 import { fetchPostContent } from "../../lib/posts";
@@ -14,7 +13,7 @@ import { CodeSandbox } from "../../components/rich-content/CodeSandbox";
 import { Replit } from "../../components/rich-content/Replit";
 import { Imgur } from "../../components/rich-content/Image";
 import { ImgWithText } from "../../components/rich-content/ImageWithText";
-import {MDXRemoteProps} from "next-mdx-remote/dist";
+import {serialize} from "next-mdx-remote/serialize";
 
 export type Props = {
   title: string;
@@ -24,7 +23,7 @@ export type Props = {
   tags: string[];
   author: string;
   description?: string;
-  source: MDXRemoteProps; // not sure about this type
+  source: any;
 };
 
 const components = {
