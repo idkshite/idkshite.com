@@ -16,10 +16,10 @@ Because then, the question arises: How do you safely transfer the `key` to a tru
 
 This is where `public` and `private keys` come into play.
 
-# TLDR;
+## TLDR;
 `Public` and `private keys` can be used to hide the content of messages from strangers but expose them to trusted parties. They can also act as a way to verify the integrity of a `message`.
 
-# Encryption
+## Encryption
 Imagine instead of `1 key` you know have `2 keys`.
 
 <ImgWithText style={{height:"200px",width: "auto"}} url={"https://imgur.com/NvE13bf"} alt={"smeagol my private key"} width={"200px"}>
@@ -43,7 +43,7 @@ To protect the `message`, you encrypt it with your friends `public key`. Now the
 ### Interactive node.js message encryption
 <Replit url="https://replit.com/@idkshite/encryption" filename={"index.js"}/>
 
-# Verify message integrity
+## Verify message integrity
 There is only one problem with this example. If someone interferes with the transmission between you and Mathilda, they can create a new `message` with Mathilda's `public key` and pretend it is coming from you. What if they add your least favourite song to the playlist? Mathilda will never talk to you again if she finds out you listen to Wham!(I hope you your friends aren't that judgemental)
 
 But fortunately, your keys can also help you with this challenge.
