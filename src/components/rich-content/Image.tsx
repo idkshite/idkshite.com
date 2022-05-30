@@ -11,7 +11,7 @@ export function Imgur({
 }) {
   return (
     <img
-      className={className}
+      className={`rich-content ${className}`}
       src={`${url}.jpg`}
       alt={alt}
       style={{ ...{ borderRadius: "4px" }, ...style }}

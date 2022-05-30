@@ -46,6 +46,10 @@
         @apply text-lg;
     }
 
+    .content .rich-content {
+        @apply mb-4;
+    }
+
     .content pre {
         display: block;
         background-color: rgba(27, 31, 35, 0.05);
@@ -66,7 +70,7 @@
         font-size: 85%;
         padding: 0.2em 0.4em;
         margin: 0;
-        color: #d96565;
+        color: #eb5a5a;
         background-color: rgba(27, 31, 35, 0.05);
         border-radius: 3px;
     }

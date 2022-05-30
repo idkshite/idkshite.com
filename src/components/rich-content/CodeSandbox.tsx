@@ -1,6 +1,7 @@
 export function CodeSandbox({ embedURL }: { embedURL: string }) {
   return (
     <iframe
+        className={"rich-content"}
       src={embedURL}
       style={{
         height: "500px",

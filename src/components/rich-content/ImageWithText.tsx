@@ -17,7 +17,7 @@ export function ImgWithText({
   // @ts-ignore
   return (
     <>
-      <div className={className}>
+      <div className={`rich-content ${className}`}>
         <Imgur
           url={url}
           alt={alt}

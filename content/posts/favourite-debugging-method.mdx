@@ -1,0 +1,59 @@
+---
+slug: favourite-debugging-method
+title: Having a conversation with yourself
+subtitle: Reading and debugging code if you don't know where to start
+date: 2022-05-30
+author: lucca
+tags:
+  - debugging
+  - programming
+  - learn-in-public
+---
+
+Sometimes I have to read code that I either didn't write myself or haven't looked at in a while.
+This can be a daunting task.
+
+Where do I start?
+How do I prevent getting lost in details?
+How do I keep track of all the fractions of code I've already looked at?
+How can I learn as much as possible from my endeavour?
+How can I finish this task as fast as possible?
+
+If the code is somehow observable (like a User Interface) I would probably want to observe what the code actually does before understanding the code itself.
+Afterwards I identify the files responsible for the interactions seen on screen,
+and come up with hypotheses which code component is responsible for which observable interaction on the screen.
+But before I've verified my first hypothesis I may already feel overwhelmed by following a logical and trying to understand all its possible outcomes.
+This is where my favourite debugging technique comes into play.
+
+## ✍️ Talking to yourself in notion
+
+Instead of running through all these logical branches in my head,
+I pick the one that seems most relevant to my problem and start writing down my thought process in my favourite note-taking app.
+I prefer notion as it supports nesting collapsible text blocks which allows you to hide your nested lines of thought if they become less relevant.
+
+<Video src="https://cleanshot-cloud-fra.accelerator.net/media/23887/SUOpfagq1hyqBB2PDHb7ApzG7vw7TGQRMDmvZ0MS.mp4"/>
+
+I start with a question and try to answer it by following my line of thought.
+Then I move through the code line by line and write down what it does and how it affects what I see on the screen.
+In this example I wanted to find out: *"what happens if I click the publish button when creating a new article?"* inside the <Link url={"https://react-ts-redux-realworld-example-app.netlify.app/#/editor"}>React RealWorld App</Link> <Link url={"https://github.com/angelguzmaning/ts-redux-react-realworld-example-app"}>(GitHub)</Link>
+
+If this process brings up new questions, I write them down and try to answer them in a collapsible text block.
+Sometimes I decide to postpone answering a question.
+Then I mark this question with a "🤔" emoji, so I don't forget that I haven't answered it yet.
+In this example I asked myself the question: *"Why do we set state.submitting flag to true . Which part of the app code reacts to this state? "*
+I assumed this flag could trigger something relevant in the code, but it turned out it only disables the editor form.
+
+Occasionally I skip following a line of thought and make assumptions about how the code works to progress faster. To make sure I don't forget what I skipped, I mark it with a "🙈" emoji.
+In my example I assumed that `<ArticleEditor disabled={true} .../>` will disable the whole form inside `ArticleEditor`. Because this is not relevant for my problem at hand I can safely ignore it until it becomes relevant.
+
+You may think this is a time-wasting process. Why not go through this in my head instead?
+It may be true that it takes a bit longer to write down your thoughts, but it has some undeniable benefits over "keeping everything in my head"
+* If I get distracted I still know where to continue
+* By writing down what I've done, I always have a record of the approaches I've used to solve the underlying problem.
+* I see which part of he code I may have only checked superficially, and I can come back to if it becomes relevant.
+* You also know which questions you haven't answered yet. Did you make some hypothesis but never verified them and based your whole debugging process on it?
+
+In the end there is no silver bullet, and I don't find this approach particularly helpful if the task at hand is manageable in size.
+But when I feel overwhelmed by a Task this is my go-to approach to eat the elephant with small bites 🐘
+
+

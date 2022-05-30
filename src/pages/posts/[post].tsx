@@ -14,6 +14,8 @@ import { Replit } from "../../components/rich-content/Replit";
 import { Imgur } from "../../components/rich-content/Image";
 import { ImgWithText } from "../../components/rich-content/ImageWithText";
 import {serialize} from "next-mdx-remote/serialize";
+import {Video} from "../../components/rich-content/Video";
+import {Link} from "../../components/rich-content/Link";
 
 export type Props = {
   title: string;
@@ -31,6 +33,8 @@ const components = {
   TwitterTweetEmbed,
   CodeSandbox,
   Replit,
+  Video,
+  Link,
   Imgur,
   ImgWithText,
 };
