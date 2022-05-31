@@ -1,0 +1,86 @@
+---
+slug: asana-node-cli
+title: Conjure your asana tasks straight onto your terminal window
+subtitle: Quickly build an asana CLI with node.js (oclif.io)
+date: 2022-05-31
+author: lucca
+tags:
+  - programming
+  - learn-in-public
+---
+
+Project management tools like asana can be pretty noisy.
+Especially if you're not maintaining them every day.
+I encountered this problem and was looking for an alternative way to get my relevant information.
+An approach that didn't require me to actively click through the asana interface every day,
+just to keep up with the latest outstanding tasks.
+
+My idea was to get the **most relevant asana tasks** onto my screen with a **single command**.
+This way I can decide regularly if I tackle a task or postpone it until I finished a more prominent issue.
+
+## node.js CLI with oclif
+
+*Disclaimer: In hindsight oclif was completely overpowered for this project and this could've easily been done with a simple node script. I'm planning to extend this CLI so that kind of justifies it.*
+
+🏷 <Link url={"https://oclif.io/"}>Oclif</Link>  offers a framework that does the heavy lifting when it comes to CLI features like:
+
+* generating the project structure
+* argument parsing
+* out of the box typescript support
+* <Link url={"https://oclif.io/docs/features"}>and more...</Link>
+
+I've generated the project structure with `npx oclif generate asana-cli`
+and after going through the interactive generator process I've ended up with a fully scaffolded cli
+<ImgWithText style={{height:"400px",width: "auto"}} url={"https://imgur.com/3MxMDuv"} alt={"interactive generator questions"} width={"400px"}>
+    Interactive generator asks a couple of questions
+</ImgWithText>
+<ImgWithText style={{height:"400px",width: "auto"}} url={"https://imgur.com/sQxi4s7"} alt={"generates full project structure"} width={"400px"}>
+    The generated cli project structure
+</ImgWithText>
+
+After this step I ran `npx oclif generate command tasks` inside the project path to generate a starter template for my first command.
+It created a new file in `/src/commands/tasks.ts`.
+The command is called "tasks" because it fetches the most relevant tasks from asana.
+
+## Fetching the tasks from asana
+
+First we install all required dependencies.
+run `npm install asana luxon @types/luxon @types/asana`
+`asana` contains the node client to interact with the asana REST API.
+We will use the date time library `luxon` to compare and format dates.
+
+After important all dependencies we create an instance of the asana client and pass in our personal access token from asana as an argument.
+For security reasons the Token is not passed in as a string but as an environment variable.
+This environment variable (`ASANA_ACCESS_TOKEN`) needs to be accessible to the code when the CLI is executing.
+
+Then I fetched the relevant asana tasks inside of `/src/commands/tasks.ts` based on an <Link url="https://github.com/Asana/node-asana#examples">example from their docs</Link> and filtered them
+so I only get the ones that are due today or in up to 4 days.
+
+<Replit url="https://replit.com/@idkshite/asana-cli" filename="src/commands/tasks.ts"/>
+
+During development, you can build and run the cli with:
+
+`npm run build` to compile the typescript code and generate a new
+
+`ASANA_ACCESS_TOKEN=1/12123123123123:fi2rfklaf2ofaj3iofalfj314 ./bin/run tasks` to run the tasks command
+
+If you want to try out the CLI inside the <Link url="https://replit.com/@idkshite/asana-cli">replit</Link>, then you need to fork it and add
+your own `ASANA_ACCESS_TOKEN` in the "Secrets (Environment Variables)" tab of your forked replit.
+
+<ImgWithText style={{height:"400px",width: "auto"}} url={"https://imgur.com/gKKB5i0"} alt={"add your personal access token"} width={"400px"}>
+    "Secrets (Environment Variables)" tab of a replit
+</ImgWithText>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
