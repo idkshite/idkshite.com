@@ -1,0 +1,42 @@
+---
+slug: global-env-vars
+title: Store environment variables globally using fish-shell
+subtitle: Stop your env vars from disappearing after you close your shell
+date: 2022-06-01
+author: lucca
+tags:
+  - programming
+  - learn-in-public
+---
+
+Sometimes I want to use environment variables
+but if I set them inside of one terminal window they are no longer available if open a new terminal tab.
+Especially if I like to run a command globally, without providing the environment variable again-and-again, I need to persist the env variable somehow.
+
+In this example I'm using the <Link url="https://fishshell.com/">fish-shell</Link> because it's my most used shell.
+
+
+## 🪠 Making the environment variable sticky in fish
+
+Usually you set a (volatile) local environment variable with in `fish` with
+`set KEY VALUE`.
+Fish makes it quite easy to persist the environment variable over new shell instances.
+All I need to do is run `set -U KEY VALUE` which creates a "universal" environment variable instead of a local one.
+Fish will store your universal variable in a file in `~/.config/fish/fish_variables`.
+Be aware that these variables are stored in clear text. 👀
+
+
+### Did it work?
+Now I can test if the variable is universally available by setting a new env var in one terminal window with `set -U MY_API_KEY 123A4h512`.
+Then I open another terminal window and run `echo $MY_API_KEY` and I should see `123A4h512` printed to the screen.
+
+In case you'd like to remove this environment variable at some point, just run:
+`set -eU KEY VALUE`.
+
+🤔 *I'm wondering how to store environment variables in an encrypted storage. Maybe this will be the topic of a future post.*
+
+
+
+
+
+
