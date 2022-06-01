@@ -4,6 +4,7 @@
 
     .content {
         font-family:  "Jost", sans-serif;
+        @apply break-all
     }
 
     .content p {

@@ -17,28 +17,15 @@ export function ImgWithText({
   // @ts-ignore
   return (
     <>
-      <div className={`rich-content ${className}`}>
+      <div className={`rich-content flex flex-col mb-4 items-center ${className}`}>
         <Imgur
+        className="mb-2"
           url={url}
           alt={alt}
-          style={{ ...{ marginRight: VERTICAL_MARGIN.HALF }, ...style }}
+          style={{...style }}
         />
-        <p>{children}</p>
+        <p className="!text-sm">{children}</p>
       </div>
-      <style jsx>
-        {`
-          div {
-            display: flex;
-            flex-direction: row;
-            margin-bottom: ${VERTICAL_MARGIN.DEFAULT}px;
-
-            align-items: center;
-          }
-          p {
-            ${FONT_STYLE.BODY4}
-          }
-        `}
-      </style>
     </>
   );
 }
