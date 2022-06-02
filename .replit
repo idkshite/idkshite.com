@@ -1,0 +1,2 @@
+language = "bash"
+run = "echo '💩 this replit doesnt run and is only for file discovery'"
