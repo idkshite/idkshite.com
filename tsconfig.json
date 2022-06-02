@@ -20,7 +20,8 @@
     "incremental": false
   },
   "exclude": [
-    "node_modules"
+    "node_modules",
+   "netlify/**/*"
   ],
   "include": [
     "next-env.d.ts",
