@@ -9,7 +9,7 @@ export default async (req: Request, context: Context) => {
     try {
         // only get page requests
         if(req.headers.get("sec-fetch-dest") !== "document"){
-            return await context.next({sendConditionalRequest: true});
+            return await context.next();
         }
 
         const notion = new Client({
@@ -36,9 +36,9 @@ export default async (req: Request, context: Context) => {
             },
         })
 
-        return await context.next({sendConditionalRequest: true});
+        return await context.next();
     }catch(error){
-        return await context.next({sendConditionalRequest: true});
+        return await context.next();
     }
 
 };
