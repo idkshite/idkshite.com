@@ -1,8 +1,8 @@
-import type { Context } from "https://edge-bootstrap.netlify.app/v1/index.ts";
+
 import { Client } from "https://deno.land/x/notion_sdk/src/mod.ts";
 import {getFlagEmojiByLanguageCode} from "./flags.ts";
 
-export default async (req: Request, context: Context) => {
+export default async (req: Request, context: any) => {
 
     try {
         // only get page requests
