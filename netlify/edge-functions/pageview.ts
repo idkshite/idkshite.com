@@ -1,5 +1,7 @@
 import { Client } from "https://deno.land/x/notion_sdk/src/mod.ts";
 import {getFlagEmojiByLanguageCode} from "../lib/getFlagByLanguageCode.ts";
+import {createTitleProperty} from "../lib/notion/createTitleProperty.ts";
+import {createRichTextProperty} from "../lib/notion/createRichTextProperty.ts";
 
 export default async (req: Request, context: any) => {
 
@@ -42,27 +44,7 @@ export default async (req: Request, context: any) => {
 
 
 
-function createRichTextProperty(content: string): any{
-    return {
-        rich_text: [
-            {
-                text: {
-                    content,
-                },
-            },
-        ],
-    }
-}
 
-function createTitleProperty(content: string): any{
-    return {
-        title: [
-            {
-                text: {
-                    content,
-                },
-            },
-        ],
-    }
-}
+
+
 
