@@ -41,7 +41,7 @@ export default async (req: Request, context: any) => {
 
 
 
-function createRichTextProperty(content: string): any{
+export function createRichTextProperty(content: string): any{
     return {
         rich_text: [
             {
