@@ -1,6 +1,6 @@
 
 // import { Client } from "https://deno.land/x/notion_sdk/src/mod.ts";
-import {getFlagEmojiByLanguageCode} from "./flags.ts";
+// import {getFlagEmojiByLanguageCode} from "./flags.ts";
 
 export default async (req: Request, context: any) => {
 
@@ -14,8 +14,8 @@ export default async (req: Request, context: any) => {
             auth: Deno.env.get("NOTION_API_TOKEN")
         })*/
 
-        const emoji = getFlagEmojiByLanguageCode(context.geo?.country?.code ?? "poop");
-        console.log("emoji",emoji, typeof emoji);
+        //const emoji = getFlagEmojiByLanguageCode(context.geo?.country?.code ?? "poop");
+        //console.log("emoji",emoji, typeof emoji);
         console.log("pathname", new URL(req.url).pathname);
 
         /*await notion.pages.create({
