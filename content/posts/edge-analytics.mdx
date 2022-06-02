@@ -1,0 +1,88 @@
+---
+slug: edge-analytics
+title: Analytics on the edge
+subtitle: Building site analytics with netlify edge functions and notion
+date: 2022-06-02
+author: lucca
+tags:
+  - programming
+  - learn-in-public
+---
+
+I needed a simple page view counter for idkshite.com. (built with next.js)
+This is how I ended up building a rudimentary analytics solution with netlify edgde functions and notion.
+
+## 🧗 Getting started with netlify edge functions
+
+First I created your function file in the `netlify/edge-functions` path as `netlify/edge-functions/pageview.ts`
+In the `/netlify.toml` I defined the path by which the function is triggered.
+
+<Link url={"https://github.com/idkshite/idkshite.com/blob/daf3baa12211a49f405aaf306d0bce6de5374a60/netlify.toml#L5-L7"}>netlify.toml</Link>
+
+```toml
+[[edge_functions]]
+path = "/*"
+function = "pageview"
+```
+In our case the function should track every initial pageview. Therefore it need to run on all paths.(`"/*"`)
+
+Then I added a function to `pageview.ts` and exported it as default.
+This is the minimum requirement for an edge function.
+Your default exported function receives a `request: Request`and `context: Context` object that you can use to manipulate and extend your response.
+In our case we will just call `context.next()` to return the page that was requested in the first place.
+
+## 📯 Sending request context to notion
+
+But before this, we send the requests `Path`, `Date.now`, the environment ("local" or "prod") and `Country` and `City` from the `context` object to a notion database.
+Before adding any of the below code into your local IDE/Editor, I would recommend installing a `deno` plugin to prevent funky error messages.
+
+Netlify runs their edge functions in the `deno` runtime environment which has some syntactical differences to your average
+off-the-shelve typescript.
+For the same reasons I also excluded the entire `/netlify` folder from the typescript compilation process because the ts-compiler can't deal
+with `deno` code.The `deno` runtime environment can natively run typescript, so no compilation needed for now.
+
+<Link url={"https://github.com/idkshite/idkshite.com/blob/daf3baa12211a49f405aaf306d0bce6de5374a60/tsconfig.json#L24"}>tsconfig.json</Link>
+
+```
+...
+"exclude": [
+   "node_modules",
+   "netlify/**/*"
+  ],
+...
+```
+
+
+<Replit url="https://replit.com/@idkshite/idkshitecom" filename="netlify/edge-functions/pageview.ts"/>
+
+I installed the netlify cli with `npm install netlify-cli -g` to run the edge-functions locally.
+Run `netlify dev --edgeInspect=127.0.0.1:9229` to try out your edge functions together with your next.js app.
+`--edgeInspect=127.0.0.1:9229` allows you to see logs of the local edge functions.
+
+🤔 *`netlify dev` launches your webapp with edge functions available, but how and what are they doing it exactly? Maybe that's the topic for a future post*
+
+In the end I get something like this inside my notion database.
+
+<ImgWithText url="https://imgur.com/d94Z36m">
+    Notion Database containing page views
+</ImgWithText>
+
+In this example I grouped all database items by `Path` and filtered out the lines where `Environment !== Prod`.
+
+Right now this solution still has some shortcomings.
+* It will count every request as a hit, even if it's all coming from the same IP-Address
+* Once you're on the page, subsequent clicks on internal links will not be tracked because they are filtered out inside the edge function (for now)
+* I basically only get hit-counts but no user journeys or bounce rates etc...
+
+This is by no means competition for "Google Analytics" or Netlify's own Edge based analytics solution, but it shows that
+analytics isn't magic. 🪄 It's just well combined pieces of data. 🤖
+
+
+
+
+
+
+
+
+
+
