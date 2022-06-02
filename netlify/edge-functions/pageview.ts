@@ -1,4 +1,4 @@
-import type { Context } from "netlify:edge";
+import type { Context } from "https://edge-bootstrap.netlify.app/v1/index.ts";
 import { Client } from "https://deno.land/x/notion_sdk/src/mod.ts";
 import {getFlagEmojiByLanguageCode} from "./flags.ts";
 
