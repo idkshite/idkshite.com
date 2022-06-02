@@ -2,8 +2,9 @@ import { Client } from "https://deno.land/x/notion_sdk/src/mod.ts";
 import {getFlagEmojiByLanguageCode} from "../lib/getFlagByLanguageCode.ts";
 import {createTitleProperty} from "../lib/notion/createTitleProperty.ts";
 import {createRichTextProperty} from "../lib/notion/createRichTextProperty.ts";
+import {Context } from "netlify:edge";
 
-export default async (req: Request, context: any) => {
+export default async (req: Request, context: Context) => {
 
     try {
         // only get page requests
