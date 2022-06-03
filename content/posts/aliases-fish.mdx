@@ -1,0 +1,42 @@
+---
+slug: aliases-fish
+title: 🩳 Write your own global fish aliases
+subtitle: Harness fish-shell aliases to run global commands on your terminal
+date: 2022-06-03
+author: lucca
+tags:
+  - shorts
+  - programming
+  - learn-in-public
+---
+
+Sometimes I see myself typing the same command + parameters combination over and over
+as if they should be the default behaviour for the command.
+
+For me `ls -a` is such a candidate. The `-a` flag includes files and directories starting with `"."` into the list command.
+Most of the time when I use the terminal I also interact with code. Therefor I want to see all code related files (including files like `.gitignore`).
+
+## 🐡 Define an alias with fish
+With fish it's a breeze to define an alias.
+I opened `~/.config/fish/config.fish` (create one if it doesn't exist yet).
+
+Then I added the line `alias ls="ls -a"` to replace `ls` with `ls -a`.
+
+No worries, you can still pass any additional argument to your `ls` alias.
+
+## Make your life easier with aliases
+
+<Video src="https://cleanshot-cloud-fra.accelerator.net/media/23887/TIDudw5Iwj4gm76yb6YccPWnHYoTv3FmpCYiiT04.mp4"/>
+
+
+
+
+
+
+
+
+
+
+
+
+
