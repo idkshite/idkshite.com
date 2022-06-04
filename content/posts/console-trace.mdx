@@ -1,0 +1,47 @@
+---
+slug: console-trace
+title: From where was my code called?
+subtitle: Find out who executed your code with `console.trace()`
+date: 2022-06-04
+author: lucca
+tags:
+  - programming
+  - debugging
+  - learn-in-public
+---
+
+Recently one of my colleagues showed me a nifty trick how you can find out from where your code was called.
+The problem was that I had a function that was called from multiple places inside the application,
+but I needed to find out which specific part/function inside the app called it.
+Just `console.log`ing something inside the function didn't do the trick because I couldn't who triggered the function which caused the log.
+
+## `console.log(new Error())`
+The answer lies in calling `console.log("whatever you want to log", new Error())` inside of the function you want to inspect.
+`new Error()` will give you a stacktrace inside your console next to the desired log message.
+
+In my contrived example below I want to find out who called `getUsername()`.
+It is called inside `showDashboard()` and `showProfile()`.
+If you open your console and click on the `console.log` button below you will see a stacktrace that shows you, it was called in
+`showDashboard()`.
+
+<ImgWithText url="https://imgur.com/9RMoL3P">
+    `getUsername()` was called from `showDashboard()`
+</ImgWithText>
+
+## `console.trace()`
+If you have lots of logs in your console it may be a bit confusing to see logs containing the word `Error` without being an actual error.
+This is where `console.trace()` comes to the rescue.
+It works pretty much like the previous example, except you don't need to provide `new Error()`.
+This creates slightly more tidy and descriptive code during debugging.
+
+You can try it out below by opening your console and clicking the `console.trace` button.
+Make sure your dev-tools console is open, otherwise you may not see the full stacktrace.
+
+So why not used it everytime? Sadly `console.trace` is not supported in all environments.
+For example. If you open the built-in console of the codesandbox below, you won't see any stacktrace from `console.trace`.
+
+<CodeSandbox embedURL="https://codesandbox.io/embed/console-trace-and-console-log-new-error-xje6l3?fontsize=14&hidenavigation=1&theme=dark"/>
+
+Of course, I can also use a debugger to get the stacktrace from a breakpoint inside of a function.
+But there are scenarios where using a debugger is either impossible or impractical.
+Then it's good to know an alternative. 🥳
