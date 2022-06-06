@@ -1,0 +1,34 @@
+---
+slug: luxon-same-day
+title: 🩳 Is this date today? With Luxon
+subtitle: Compare two dates while ignoring time, using Luxon
+date: 2022-06-06
+author: lucca
+tags:
+  - shorts
+  - programming
+  - learn-in-public
+---
+
+I was looking for a way to find out whether a <Link url="https://moment.github.io/luxon/#/">Luxon</Link> `DateTime` equals to today (`DateTime.now()`).
+I couldn't find a utility method like the <Link url="https://date-fns.org/v2.28.0/docs/isToday"> .isToday(date) </Link> from `date-fns`.
+So I found the following snippet that compares Dates solely based on the day. This allows you to figure out if a given DateTime is today.
+
+`const isToday = someDay.hasSame(DateTime.now(),"day")`
+
+Even though the name may be a misleading, `hasSame(DateTime,"day")` doesn't only compare days it also makes sure the "Higher-order" units are identical.
+So the date also has the same week, month and year.
+
+The only caveat: Time zones are ignored by this method. So if you'd like to compare two dates
+from different timezones you first need to adjust one to the other with <Link url="https://moment.github.io/luxon/api-docs/index.html#datetimesetzone">.setZone(zone)</Link>
+Or adjust both to the local timezone with <Link url="https://moment.github.io/luxon/api-docs/index.html#datetimetolocal">.toLocal()</Link>
+
+
+
+
+
+
+
+
+
+
