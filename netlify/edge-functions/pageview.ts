@@ -8,7 +8,7 @@ export default async (req: Request, context: Context) => {
 
     try {
         // only get page requests
-        if(req.headers.get("sec-fetch-dest") !== "document"){
+        if(req.headers.get("sec-fetch-dest") !== "document" || req.url.contains("/_next/static/")){
             return await context.next();
         }
 
