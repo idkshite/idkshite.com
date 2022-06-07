@@ -85,7 +85,11 @@ export const getStaticProps: GetStaticProps = async ({ params }) => {
       yaml: (s) => yaml.load(s, { schema: yaml.JSON_SCHEMA }) as object,
     },
   });
-  const mdxSource = await serialize(content, { scope: data });
+  const mdxSource = await serialize(content, { scope: data, mdxOptions: {
+    remarkPlugins: [
+      require('remark-prism'),{}
+    ],
+    } });
   return {
     props: {
       title: data.title,

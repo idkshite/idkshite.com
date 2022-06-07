@@ -1,8 +1,11 @@
 import "normalize.css";
 import { AppProps } from "next/app";
+
 // NOTE: Do not move the styles dir to the src.
 // They are used by the Netlify CMS preview feature.
 import "../../public/styles/global.css";
+import "/public/styles/prism-themes/syntax.css";
+import "/public/styles/fonts/dank-mono/dmvendor.css";
 import { FONT_STYLE } from "../../public/styles/font";
 
 export default function App({ Component, pageProps }: AppProps) {
@@ -11,7 +14,6 @@ export default function App({ Component, pageProps }: AppProps) {
       <Component {...pageProps} />
       <style jsx global>{`
         @import url("https://fonts.googleapis.com/css2?family=Jost:ital,wght@0,400;0,500;0,600;0,700;0,900;1,400&display=swap");
-        @import url("https://fonts.googleapis.com/css2?family=Ubuntu+Mono&display=swap");
 
         html,
         body {
@@ -80,10 +82,9 @@ export default function App({ Component, pageProps }: AppProps) {
         .fancy {
           color: #15847d;
         }
-
-        @media (min-width: 769px) {
-        }
-      `}</style>
+        
+      `}
+      </style>
     </>
   );
 }

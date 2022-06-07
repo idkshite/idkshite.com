@@ -14,7 +14,9 @@ I was looking for a way to find out whether a <Link url="https://moment.github.i
 I couldn't find a utility method like the <Link url="https://date-fns.org/v2.28.0/docs/isToday"> .isToday(date) </Link> from `date-fns`.
 So I found the following snippet that compares Dates solely based on the day. This allows you to figure out if a given DateTime is today.
 
-`const isToday = someDay.hasSame(DateTime.now(),"day")`
+```js
+const isToday = someDay.hasSame(DateTime.now(),"day")
+```
 
 Even though the name may be a misleading, `hasSame(DateTime,"day")` doesn't only compare days it also makes sure the "Higher-order" units are identical.
 So the date also has the same week, month and year.

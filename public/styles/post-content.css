@@ -67,7 +67,8 @@
     }
 
     .content code {
-        font-family: "Ubuntu Mono", monospace;
+        font-family:"Dank Mono", "Ubuntu Mono", monospace;
+        font-variant-ligatures: common-ligatures;
         font-size: 85%;
         padding: 0.2em 0.4em;
         margin: 0;
@@ -133,7 +134,7 @@
     }
 
     .content kbd {
-        font-family: "Ubuntu Mono", monospace;
+        font-family: "Dank Mono", "Ubuntu Mono", monospace;
     }
 
     .content img {
