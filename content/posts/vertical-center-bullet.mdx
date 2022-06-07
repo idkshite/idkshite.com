@@ -1,0 +1,66 @@
+---
+slug: vertical-center-bullet
+title: 🩳 Get your bullets aligned
+subtitle: Center custom list bullet points vertically
+date: 2022-06-07
+author: lucca
+tags:
+  - shorts
+  - programming
+  - learn-in-public
+---
+
+By-default the bullet points of an HTML lists `<li>` tag are vertically aligned to the top.
+Even if the text inside-of the `<li>` spans over multiple lines the bullet stays top aligned.
+When I was faced with this problem I was tempted to try changing the `list-style-position` css property of the `<ul>`.
+But contrary to it's name, `list-style-position` only changes whether the bullet point of your list is inside
+the `<ul>` html block or outside.
+
+## 🔫 Vertically center your customer bullet list item
+
+The approach I took requires you to put the text inside the `<li>`'s into `<span>`'s.
+
+```html
+<ul class="real-bullets">
+  <li><span>it's raining cats and dogs</span></li>
+  <li><span>break a leg</span></li>
+  <li><span>Give someone the benefit of the doubt</span></li>
+</ul>
+```
+
+next you need to vertically align your `span` inside the `li` with
+
+```css
+li > span {
+  display: inline-block;
+  vertical-align: middle;
+}
+```
+
+🤔 *I'm not sure why `display: inline-block;` is necessary and `display: inline;` isn't enough. But that may be the topic for another day.*
+
+<CodeSandbox embedURL="https://codesandbox.io/embed/vertical-centered-bullet-points-tqrdge?fontsize=14&hidenavigation=1&theme=dark"/>
+
+## So `vertical-algin` is useful after all?
+Before `flexbox` existed I often tried to vertical center boxes in layouts with `vertical-align: middle` and was wondering why it worked so rarely.
+Thanks to the <Link url="https://developer.mozilla.org/en-US/docs/Web/CSS/vertical-align">mdn docs</Link> I now know that `vertical-align` only works in two use-cases.
+
+* To vertically align an inline element's box inside its containing inline box.
+* To vertically align content in a table cell.
+
+So unless you build your layout with `inline` elements or `table`s you're out of luck if you're tyring to use `vertical-align: middle` for your page layout, like I did.
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
