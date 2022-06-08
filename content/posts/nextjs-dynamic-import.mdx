@@ -1,0 +1,61 @@
+---
+slug: nextjs-dynamic-import
+title: Import components dynamically with Next.js
+subtitle: Reduce bundle size by dynamically importing react components
+date: 2022-06-08
+author: lucca
+tags:
+  - shorts
+  - programming
+  - learn-in-public
+---
+
+Today I learned that you can dynamically import components in your Next.js project.
+According to the <Link url="https://nextjs.org/docs/advanced-features/dynamic-import">Next.js docs</Link>
+your simply import your react component with:
+
+```js
+import Dynamic from 'next/dynamic'
+
+const YourDynamicComponent = Dynamic(() => import('../components/hello'))
+
+{/* Use it like any other component*/}
+<YourDynamicComponent/>
+```
+
+In this example it is expected that the imported component is default exported.
+
+```js
+
+export default function YourDynamicComponent() {
+
+  return (
+    <div>
+      <h1>So dynamic and fresh</h1>
+    </div>
+  )
+}
+```
+
+## 🤩 Interactive Example
+Give a try. This example if fully interactive.Just run the Replit.
+
+We're loading a component that displays the current Date and formats it with the
+luxon library. Both are loaded dynamically.
+
+<Replit url="https://replit.com/@idkshite/Nextjs-Dynamic-Import" filename="pages/index.jsx"/>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
