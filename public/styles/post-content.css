@@ -47,7 +47,8 @@
         @apply text-lg;
     }
 
-    .content .rich-content {
+    .content .rich-content,
+    .content .remark-highlight {
         @apply mb-4;
     }
 
