@@ -16,6 +16,7 @@ import { ImgWithText } from "../../components/rich-content/ImageWithText";
 import {serialize} from "next-mdx-remote/serialize";
 import {Video} from "../../components/rich-content/Video";
 import {Link} from "../../components/rich-content/Link";
+import {ReactNode} from "react";
 
 export type Props = {
   title: string;
@@ -28,7 +29,7 @@ export type Props = {
   source: any;
 };
 
-const components = {
+const components: {[key in CustomMDXComponentName] : ReactNode }= {
   YouTube,
   TwitterTweetEmbed,
   CodeSandbox,
@@ -38,7 +39,10 @@ const components = {
   Imgur,
   ImgWithText,
 };
-const slugToPostContent = ((postContents) => {
+
+export type CustomMDXComponentName = "YouTube" | "TwitterTweetEmbed" | "CodeSandbox" | "Replit" | "Video" | "Link" | "Imgur" | "ImgWithText"
+
+export const slugToPostContent = ((postContents) => {
   let hash = {};
   postContents.forEach((it) => (hash[it.slug] = it));
   return hash;
