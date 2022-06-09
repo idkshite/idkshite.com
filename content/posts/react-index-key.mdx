@@ -1,0 +1,17 @@
+---
+slug: react-index-key
+title: 🩳 Don't use index as a react key prop
+subtitle: Why it's not advisable to use an array index as your react key prop
+date: 2022-06-09
+author: lucca
+tags:
+  - shorts
+  - programming
+  - learn-in-public
+---
+
+Today I learned that one shouldn't use the and `index` as the React `key` prop.
+React asks developers to provide a unique `key` prop for lists in React for the sake of keeping track of the list items correct order.
+Settings the `index` as your `key` stops React from complaining about the missing key prop but the problem persists because internally react already uses the index to infer the order (if key is missing).
+
+You can find an insightful example of this on <Link url={"https://kentcdodds.com/blog/understanding-reacts-key-prop"}>Kent C. Dodds blog</Link>
