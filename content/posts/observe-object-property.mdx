@@ -1,0 +1,70 @@
+---
+slug: observe-object-property
+title: Reveal the hackerman with js getters and setters
+subtitle: Hook into changing object properties for debugging
+date: 2022-06-10
+author: lucca
+tags:
+  - programming
+  - learn-in-public
+---
+
+In this example we're observing a realtime hack of your own video game.
+Someone managed to sneak some code into your brand new "first-person-hack-and-slay-roguelite-moba" that gives players a pretty high level from the start.
+You dislike this new "feature" because it takes all the fun out of "the grind for earning xp".
+So you sally forth to find the culprit inside your codebase.
+
+You know that the hacker is somehow directly increasing the level property in your game.
+You just have to find out how exactly they increased it.
+
+Just recently you've added a small widget to your game, that logs an "Emoji Parade" onto the screen.
+You were quite satisfied with its look. But something tells you this code may do more than just logging an "Emoji Parade".
+But how can you prove it? 🤔
+
+<mark>▶️ Run the replit below to see the hack in action</mark>
+
+<Replit url="https://replit.com/@idkshite/Assign-Getters-and-Setters" filename="index.js"/>
+
+## Getter and Setters
+JavaScript offers a way to control the assignment and retrieval of existing object properties.
+You can use `get`ters and `set`tters to "do something" if someone directly accesses the property or assigns something to it.
+
+To see how the `level` changes over time we replace the `level` property on the `game` with a set and get function.
+
+```js
+function monkeyPatchLevelProperty(game, logTrace = false){
+
+      log = logTrace ? console.trace : console.log; // ignore this. This is only relevant for the logs
+
+      let _level = game.level;
+
+      Object.defineProperty(game, 'level', {
+      get: function() {
+        log("level up 🔥",_level);
+        return _level;
+      },
+        set: function(newLevel) {
+         _level = newLevel;
+        }
+      });
+
+      game.isMonkeyPatched = true; // ignore this. This is only relevant for the logs
+  }
+```
+First we define a new variable where the level value can live `let _level = game.level;` and set it to the current value of `game.level`
+Then `Object.defineProperty` allows us to change the `level` property to a `get`ter and `set`er.
+
+In the `get` function we're logging the current level if the `game.level` property gets accessed.
+We then return the current value of our new `_level` variable so the code relying on it still behaves as expected.
+
+In the `set` function we're only recreating the expected behaviour behind setting `game.level` except we're saving the value in `_level` instead of `game.level`
+
+<mark>▶️ Uncomment // monkeyPatchLevelProperty(game); to see how the geter logs every time someone accessed game.level</mark>
+
+<Replit url="https://replit.com/@idkshite/Assign-Getters-and-Setters" filename="debug.js"/>
+
+<mark>▶️ Pass in true as a second parameter to monkeyPatchLevelProperty() and you'll see a stacktrace for each time game.level gets accessed</mark>
+
+And this is how we reveal. The hacker is increasing the level `+1` every `50ms` on `line 14` inside `"/hack.js"`. 🥸
+
+<Video src="https://cleanshot-cloud-fra.accelerator.net/media/23887/Gc1SD2QdOT2IWhXzXGpwjLrOiQaX6SAKvslElCpX.mp4"/>

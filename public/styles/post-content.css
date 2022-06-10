@@ -7,8 +7,12 @@
         @apply break-words
     }
 
-    .content p {
-        @apply text-xl mb-3 leading-9
+    .content p, .content mark {
+        @apply text-xl inline-block mb-3 leading-9
+    }
+
+    .content mark {
+        @apply bg-amber-200 w-full px-6 py-4 text-[#b89403]
     }
 
     .content a {
