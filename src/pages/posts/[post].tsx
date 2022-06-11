@@ -1,7 +1,7 @@
 import { GetStaticProps, GetStaticPaths } from "next";
 import { MDXRemote } from 'next-mdx-remote'
 import matter from "gray-matter";
-import { fetchPostContent } from "../../lib/posts";
+import {fetchPostContent, slugToPostContent} from "../../lib/posts";
 import fs from "fs";
 import yaml from "js-yaml";
 import { parseISO } from "date-fns";
@@ -16,6 +16,7 @@ import { ImgWithText } from "../../components/rich-content/ImageWithText";
 import {serialize} from "next-mdx-remote/serialize";
 import {Video} from "../../components/rich-content/Video";
 import {Link} from "../../components/rich-content/Link";
+import {ReactNode} from "react";
 
 export type Props = {
   title: string;
@@ -28,7 +29,7 @@ export type Props = {
   source: any;
 };
 
-const components = {
+const components: {[key in CustomMDXComponentName] : ReactNode }= {
   YouTube,
   TwitterTweetEmbed,
   CodeSandbox,
@@ -38,11 +39,8 @@ const components = {
   Imgur,
   ImgWithText,
 };
-const slugToPostContent = ((postContents) => {
-  let hash = {};
-  postContents.forEach((it) => (hash[it.slug] = it));
-  return hash;
-})(fetchPostContent());
+
+export type CustomMDXComponentName = "YouTube" | "TwitterTweetEmbed" | "CodeSandbox" | "Replit" | "Video" | "Link" | "Imgur" | "ImgWithText"
 
 export default function Post({
   title,

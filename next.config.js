@@ -2,7 +2,7 @@ const withImages = require("next-images");
 
 const config = {
   fileExtensions: ["jpg", "jpeg", "png", "gif", "ico", "webp", "jp2", "avif"],
-  pageExtensions: ["tsx"],
+  pageExtensions: ["tsx","ts"],
   webpack: (config, { buildId, dev, isServer, defaultLoaders, webpack }) => {
     config.module.rules.push(
       ...[

@@ -80,3 +80,9 @@ export function listPostContent(
     .filter((it) => !tag || (it.tags && it.tags.includes(tag)))
     .slice((page - 1) * limit, page * limit);
 }
+
+export const slugToPostContent = ((postContents) => {
+    let hash = {};
+    postContents.forEach((it) => (hash[it.slug] = it));
+    return hash;
+})(fetchPostContent());
