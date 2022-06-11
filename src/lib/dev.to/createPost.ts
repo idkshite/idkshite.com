@@ -21,10 +21,11 @@ export async function createDevToPost({slug,markdown,frontMatter}:{slug:string, 
 }
 
 function prependFrontMatter(markdown:string,frontMatter: PostFrontMatter, pageConfig){
+    const cover_image = frontMatter?.cover_image ? `"cover_image": ${frontMatter.cover_image}` : "";
     return `
             ---
             "canonical_url": ${pageConfig.base_url}posts/${frontMatter.slug},
-            "cover_image": ${frontMatter.cover_image}
+            ${cover_image}
             ---
         \n\n${markdown}`
 }
