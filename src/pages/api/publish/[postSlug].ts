@@ -15,6 +15,17 @@ import {ImgWithText} from "../../../components/rich-content/ImageWithText";
 import {convertCustomComponentsToJekyll} from "../../../lib/dev.to/convertCustomComponentsToJekyll";
 import {slugToPostContent} from "../../../lib/posts";
 
+export type PostFrontMatter = {
+
+    slug: string // 'asana-node-cli',
+    title: string // 'Conjure your asana tasks straight onto your terminal window',
+    subtitle: string // 'Quickly build an asana CLI with node.js (oclif.io)',
+    date: string // '2022-05-31',
+    author: string // 'lucca',
+    tags: string[] // [ 'programming', 'learn-in-public' ]
+
+}
+
 export default async function handler(req, res) {
 
     if (req.method === 'GET') {
@@ -26,12 +37,18 @@ export default async function handler(req, res) {
                 yaml: (s) => yaml.load(s, { schema: yaml.JSON_SCHEMA }) as object,
             },
         });
+        const frontMatter = data as PostFrontMatter;
 
         const cleanedContent = convertCustomComponentsToJekyll(content);
 
-        const result = await createDevToPost(slug,cleanedContent).catch((error) => {
-            res.status(500).send(error);
-        });
+        let result;
+        try {
+            result = await createDevToPost({slug,markdown: cleanedContent,frontMatter})
+        }catch(error){
+            console.error(error);
+            return res.status(500).send("error: couldn't publish the post. check logs for more details");
+        }
+
         return res.status(200).send(`published: ${slug}`);
     } else {
         return res.status(405).send("only GET request is valid");
