@@ -1,0 +1,31 @@
+---
+slug: optional-object-property
+title: Conditional object property application
+subtitle: Add a property to an object if it exists
+date: 2022-06-11
+author: lucca
+tags:
+  - programming
+  - learn-in-public
+---
+
+I often forget the exact syntax to conditionally add a property to an object during initialisation.
+In the end it is quite straight forward.
+Let's imagine I only want to apply a `cover_video` to an imaginary `post` object if it actually exists.
+That would look like this:
+
+```js
+const post = {
+    title: "Wow what a nice post",
+    text: "It's such a nice post. And so full of valuable information. I wonder if I can subscribe to this blog?",
+    ...(cover_video ? {cover_video} : {})
+}
+```
+
+<mark>▶️ Try it out in the Replit below</mark>
+
+<Replit url="https://replit.com/@idkshite/Optional-Object-Property-Assignment" filename="index.ts"/>
+
+JavaScript simply evaluates the part in between `(` and `)` as an expression and the result of the expression will be spread into the post object.
+The expression only resolves to `{cover_video: cover_video}`(here shortened as `{cover_video}` because key and value are both `cover_video`) or to and empty object `{}`.
+If you spread and empty object into another object it won't show up inside the target object. So it's perfect if you'd like to omit a property conditionally.
