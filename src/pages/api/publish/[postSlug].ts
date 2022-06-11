@@ -23,6 +23,7 @@ export type PostFrontMatter = {
     date: string // '2022-05-31',
     author: string // 'lucca',
     tags: string[] // [ 'programming', 'learn-in-public' ]
+    cover_image?: string
 
 }
 

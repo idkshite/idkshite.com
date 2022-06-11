@@ -8,11 +8,10 @@ export async function createDevToPost({slug,markdown,frontMatter}:{slug:string, 
 
     return axios.post("https://dev.to/api/articles",{
         "article": {
-            "title":frontMatter.title,
+            "title": frontMatter.title,
             "published": false,
-            "body_markdown": markdown,
-            "tags": frontMatter.tags.join(","),
-            "canonical_url": `${pageConfig.base_url}posts/${frontMatter.slug}`
+            "body_markdown": prependFrontMatter(markdown,frontMatter,pageConfig),
+            // "tags": frontMatter.tags.join(","),
         }
     }, {
         headers: {
@@ -20,3 +19,14 @@ export async function createDevToPost({slug,markdown,frontMatter}:{slug:string, 
         }
     })
 }
+
+function prependFrontMatter(markdown:string,frontMatter: PostFrontMatter, pageConfig){
+    return `
+            ---
+            "canonical_url": ${pageConfig.base_url}posts/${frontMatter.slug},
+            "cover_image": ${frontMatter.cover_image}
+            ---
+        \n\n${markdown}`
+}
+
+
