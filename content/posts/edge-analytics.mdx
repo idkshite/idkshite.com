@@ -17,7 +17,7 @@ This is how I ended up building a rudimentary analytics solution with netlify ed
 First I created your function file in the `netlify/edge-functions` path as `netlify/edge-functions/pageview.ts`
 In the `/netlify.toml` I defined the path by which the function is triggered.
 
-<Link url={"https://github.com/idkshite/idkshite.com/blob/daf3baa12211a49f405aaf306d0bce6de5374a60/netlify.toml#L5-L7"}>netlify.toml</Link>
+<Link className="!mb-0"  url={"https://github.com/idkshite/idkshite.com/blob/daf3baa12211a49f405aaf306d0bce6de5374a60/netlify.toml#L5-L7"}>netlify.toml</Link>
 
 ```toml
 [[edge_functions]]
@@ -41,7 +41,7 @@ off-the-shelve typescript.
 For the same reasons I also excluded the entire `/netlify` folder from the typescript compilation process because the ts-compiler can't deal
 with `deno` code.The `deno` runtime environment can natively run typescript, so no compilation needed for now.
 
-<Link url={"https://github.com/idkshite/idkshite.com/blob/daf3baa12211a49f405aaf306d0bce6de5374a60/tsconfig.json#L24"}>tsconfig.json</Link>
+<Link className={"!mb-0"} url={"https://github.com/idkshite/idkshite.com/blob/daf3baa12211a49f405aaf306d0bce6de5374a60/tsconfig.json#L24"}>tsconfig.json</Link>
 
 ```json
 ...

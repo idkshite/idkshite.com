@@ -1,7 +1,13 @@
 module.exports = {
+  safelist: [
+    "!mb-0",
+    "mb-0"
+  ],
   content: [
-      "./src/**/*.{html,js,jsx,ts,tsx,css}",
-    "./public/**/*.{html,js,jsx,ts,tsx,css}"],
+    "./src/**/*.{html,js,jsx,ts,tsx,css}",
+    "./public/**/*.{html,js,jsx,ts,tsx,css}",
+    "./content/posts/*.{mdx}" // doesn't work reliably. currently safe-listing classes directly used in mdx files
+  ],
   theme: {
     fontFamily: {
       'display': ['Jost',"sans-serif"],
@@ -9,6 +15,7 @@ module.exports = {
     },
     spacing: {
       "small": "4px",
+      0: "0px",
       1: "8px",
       2: "16px",
       3: "24px",
