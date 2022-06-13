@@ -17,26 +17,34 @@ type CustomMDXTag = {
 type CustomMDXTagAttributes = { [key in string]: string | number };
 type CustomMDXComponent = {
   tagName: string;
-  tokenEqualsThisTag: (token: Content) => boolean;
+  isThisTag: TagPredicateFunction;
+  // replaceWith: TagReplacementFunction; // TODO: refactor this so replaceWith is taken from CustomMDXComponent
 };
+type TagPredicateFunction = (tag: CustomMDXTag) => boolean;
+type TagReplacementFunction = (tag: CustomMDXTag) => string;
 
 const LinkMDXComponent = {
   tagName: "Link",
-  tokenEqualsThisTag: findTokenByNameFunction("Link"),
+  isThisTag: findTagByNameFunction("Link"),
 };
 
 const ReplitMDXComponent = {
   tagName: "Replit",
-  tokenEqualsThisTag: findTokenByNameFunction("Replit"),
+  isThisTag: findTagByNameFunction("Replit"),
 };
 
 const ImgWithTextMDXComponent = {
   tagName: "ImgWithText",
-  tokenEqualsThisTag: findTokenByNameFunction("ImgWithText"),
+  isThisTag: findTagByNameFunction("ImgWithText"),
 };
 
-function findTokenByNameFunction(tagName) {
-  return (token) => token.name === tagName;
+const CodeSandboxMDXComponent = {
+  tagName: "CodeSandbox",
+  isThisTag: findTagByNameFunction("CodeSandbox"),
+};
+
+function findTagByNameFunction(tagName) {
+  return (token) => token.tagName === tagName;
 }
 
 function getTokenChild(token) {
@@ -47,27 +55,27 @@ function getTokenChild(token) {
 }
 
 export function convertCustomComponentsToJekyll(markdown: string) {
-  const flatFileTokens = flattendeep(
+  const flattenedTags: CustomMDXTag[] = flattendeep(
     getFileTree(markdown).children.reduce<Content[]>((allTokens, token) => {
       return [...allTokens, getTokenChild(token)];
     }, [])
-  ).filter(
-    (token) =>
-      token.type === "mdxJsxFlowElement" || token.type === "mdxJsxTextElement"
-  );
-
-  // console.log("flatFileTokens", flatFileTokens);
+  )
+    .filter(
+      (token) =>
+        token.type === "mdxJsxFlowElement" || token.type === "mdxJsxTextElement"
+    )
+    .map((token) => convertTokenToTag(token, markdown));
 
   // TODO: make this dry
   let convertedContent = markdown;
   convertedContent = replaceComponent({
-    flatFileTokens,
+    flattenedTags,
     markdown: convertedContent,
     componentToReplace: LinkMDXComponent,
     replaceWith: (tag) => `[${tag.content}](${tag.attributes.url})`,
   });
   convertedContent = replaceComponent({
-    flatFileTokens,
+    flattenedTags,
     markdown: convertedContent,
     componentToReplace: ReplitMDXComponent,
     replaceWith: (tag) => {
@@ -75,13 +83,21 @@ export function convertCustomComponentsToJekyll(markdown: string) {
     },
   });
   convertedContent = replaceComponent({
-    flatFileTokens,
+    flattenedTags,
     markdown: convertedContent,
     componentToReplace: ImgWithTextMDXComponent,
     replaceWith: (tag) => {
       return `![${tag.content ?? "no alt tag provided"}](${
         tag.attributes.url
       }.jpg)`;
+    },
+  });
+  convertedContent = replaceComponent({
+    flattenedTags,
+    markdown: convertedContent,
+    componentToReplace: CodeSandboxMDXComponent,
+    replaceWith: (tag) => {
+      return `{% codesandbox ${tag.attributes.url} %}`;
     },
   });
   return convertedContent;
@@ -99,60 +115,49 @@ function getFileTree(content: string) {
   });
 }
 
-function getTokenByCondition({
-  flatFileTokens,
+function getTagByCondition({
+  flattenedTags,
   predicateFunction,
 }: {
-  flatFileTokens: Content[];
-  predicateFunction: (token: Content) => boolean;
+  flattenedTags: CustomMDXTag[];
+  predicateFunction: TagPredicateFunction;
 }) {
-  return flatFileTokens.filter((token) => {
-    return predicateFunction(token);
+  return flattenedTags.filter((tag) => {
+    return predicateFunction(tag);
   });
 }
 
 function replaceComponent({
-  flatFileTokens,
+  flattenedTags,
   markdown,
   componentToReplace,
   replaceWith,
 }: {
-  flatFileTokens: Content[];
+  flattenedTags: CustomMDXTag[];
   markdown: string;
   componentToReplace: CustomMDXComponent;
-  replaceWith: (tag: CustomMDXTag) => string;
+  replaceWith: TagReplacementFunction;
 }) {
-  const tokens = getTokenByCondition({
-    flatFileTokens,
-    predicateFunction: componentToReplace.tokenEqualsThisTag,
+  const filteredTags = getTagByCondition({
+    flattenedTags,
+    predicateFunction: componentToReplace.isThisTag,
   });
 
-  if (!tokens) {
-    console.log(
-      `Didn't find any tokens for tag: ${componentToReplace.tagName}'s`
-    );
+  if (!filteredTags) {
+    console.log(`Didn't find tags: ${componentToReplace.tagName}'s`);
     return markdown;
   }
 
-  //console.log(`found ${tokens.length} ${componentToReplace.tagName} tokens`);
-  //console.log(tokens);
+  return filteredTags.reduce((newMarkdown, tag, index) => {
+    // TODO: replace by position for more reliable results
+    const replacedMarkdown = replaceTag({
+      markdown: newMarkdown,
+      tag,
+      replaceWith,
+    });
 
-  return tokens
-    .map((token) => convertTokenToTag(token, markdown))
-    .reduce((newMarkdown, tag, index) => {
-      // TODO: replace by position for more reliable results
-      const replacedMarkdown = replaceTag({
-        markdown: newMarkdown,
-        tag,
-        replaceWith,
-      });
-      // console.log("replacedMarkdown", replacedMarkdown, "INDEX: ", index);
-      return (newMarkdown = replacedMarkdown);
-    }, markdown);
-
-  /*return tokens.reduce((newContent, tag) => {
-    return newContent.replace(tag.expression, replaceWith(tag));
-  }, content);*/
+    return (newMarkdown = replacedMarkdown);
+  }, markdown);
 }
 
 function replaceTag({
@@ -164,40 +169,14 @@ function replaceTag({
   tag: CustomMDXTag;
   replaceWith: (tag: CustomMDXTag) => string;
 }) {
-  // console.log("tag", tag.expression, "replace with ", replaceWith(tag));
   return markdown.replace(tag.expression, replaceWith(tag));
 }
 
-/*function replaceTagByPosition({
-  markdown,
-  tag,
-  replaceWith,
-}: {
-  markdown: string;
-  tag: CustomMDXTag;
-  replaceWith: (tag: CustomMDXTag) => string;
-}) {
-  console.log("tag", tag, "replace with ", replaceWith(tag));
-  return (
-    markdown.substring(0, tag.position.start) +
-    replaceWith(tag) +
-    markdown.substring(tag.position.end + 1)
-  );
-}*/
-
 // TODO: fix token type
-function convertTokenToTag(token, markdown): CustomMDXTag {
+function convertTokenToTag(token, markdown: string): CustomMDXTag {
   const startPos = token.position.start.offset;
   const endPos = token.position.end.offset;
-  console.log(
-    "\n\n SUBSTRING",
-    startPos,
-    "until",
-    endPos,
-    "is: ",
-    markdown.substring(startPos, endPos + 1),
-    "\n\n"
-  );
+
   return {
     expression: markdown.substring(startPos, endPos + 1),
     position: {
@@ -213,7 +192,6 @@ function convertTokenToTag(token, markdown): CustomMDXTag {
 function getAttributes(token) {
   if (!token?.attributes) return {};
   return token.attributes.reduce((attributes, prevAttribute) => {
-    // console.log("prevAttribute?.value", getAttributeValue(prevAttribute));
     return {
       ...attributes,
       [prevAttribute.name]: getAttributeValue(prevAttribute),
@@ -230,12 +208,10 @@ function getAttributeValue(attribute) {
 }
 
 function getContent(token) {
-  //console.log(`${token.name} has children ${JSON.stringify(token?.children)}`);
   if (!token?.children) return null;
   const flattenedChildrenWithValue = flattendeep(getTokenChild(token)).filter(
     (token) => token?.value
   );
-  // console.log("flattenedChildren", JSON.stringify(flattenedChildrenWithValue));
 
   return flattenedChildrenWithValue.reduce((content, child) => {
     return content + " " + child.value.trim();
