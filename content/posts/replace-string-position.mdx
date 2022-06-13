@@ -1,0 +1,46 @@
+---
+slug: replace-string-position
+title: Replace string by position
+subtitle: Use substring to replace a string at a start end end point
+date: 2022-06-13
+author: lucca
+tags:
+  - programming
+  - learn-in-public
+---
+
+While building a [cross-posting](https://github.com/idkshite/idkshite.com/blob/main/src/pages/api/publish/%5BpostSlug%5D.ts) script on [idkshite.com](https://idkshite.com) I needed to replace jsx components in my `.mdx` files with Liquid tags that can be understood by dev.to’s editor.
+The parser that i’m using to find all incompatible jsx components provides the start and end position of the component inside of the markdown string. So I couldn’t directly use `String.replace(stringToFind, replaceWithThis)`. To solve this problem, I came across this useful method to replace a string by a given position.
+
+## Replace by position
+The basic idea is creating 2 substrings before and after the content to be replaced. Then you construct a new string from the first `substring` + the new `content` + second `substring`.
+Inside the result your text has been successfully replaced.
+
+```ts
+function replaceByPosition({
+  text,
+  position,
+  replaceWith,
+}: {
+  text: string;
+  position: {start: number, end: number};
+  replaceWith: string
+}) {
+  return (
+    text.substring(0, position.start) +
+    replaceWith +
+    text.substring(position.end + 1)
+  );
+}
+
+```
+
+<Replit url="https://replit.com/@idkshite/replace-string-by-position"/>
+
+
+
+
+
+
+
+
