@@ -1,0 +1,54 @@
+---
+slug: reset-vs-normalize
+title: CSS Reset vs Normalize
+subtitle: When to use reset.css or normalize.css?
+date: 2022-06-14
+author: lucca
+tags:
+  - programming
+  - learn-in-public
+---
+
+If you develop websites for multiple browsers you’ll quickly realize your un-styled HTML doesn't look the same in all browsers.
+This makes it quite hard to keep up a consistent look and feel of a website among chrome, firefox, safari, brave, opera and browsers we better not call by their name.(Internet Expl...Psshhhhtt!)
+
+## CSS standardization to the rescue
+[normalize.css](https://necolas.github.io/normalize.css/8.0.1/normalize.css) and [reset.css](https://meyerweb.com/eric/tools/css/reset/)
+try to solve this problem by providing a common ground for all browsers.
+
+If we look at their respective websites their descriptions sound almost interchangeable:
+
+### `normalize.css`
+`normalize.css` claims to “make browsers render all elements more consistently and in line with modern standards”
+In `normalize.css` every single decision is documented and explained. It seems like every style change is there for a reason.
+
+<mark>▶️ In this CodeSandbox normalize.css is applied on otherwise unstyled HTML elements</mark>
+<CodeSandbox url="https://codesandbox.io/embed/css-normalize-r1xk9c?fontsize=14&hidenavigation=1&theme=dark&view=preview"/>
+
+### `resize.css`
+`reset.css` claims to “reduce browser inconsistencies in things like default line heights, margins and font sizes of headings, and so on”
+Judging by the style definitions, `reset.css` takes a “roundhouse-kick” approach and simply strips all styles from common elements.
+
+<mark>▶️ In this CodeSandbox reset.css is applied on otherwise unstyled HTML elements</mark>
+<CodeSandbox url="https://codesandbox.io/embed/css-reset-7gubxd?fontsize=14&hidenavigation=1&theme=dark&view=preview"/>
+
+So if they are so similar. What’s the point of adding one over the other?
+
+## When to choose which?
+
+Choose `normalize.css` if:
+
+- You want to think less about pesky browser inconsistencies
+- You’re not planning to restyle every element from scratch
+
+Choose `reset.css` if:
+
+- you’d like to work from a blank canvas
+- seek to restyle even the most elementary HTML elements
+- you hate having to overwrite the default styles
+
+
+
+
+
+
