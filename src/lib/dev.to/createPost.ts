@@ -41,7 +41,7 @@ function prependFrontMatter(
     : "";
   return `
             ---
-            "canonical_url": ${pageConfig.base_url}posts/${frontMatter.slug},
+            "canonical_url": ${pageConfig.base_url}posts/${frontMatter.slug}
             ${cover_image}
             ---
         \n\n${markdown}`;
