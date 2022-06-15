@@ -22,6 +22,7 @@ export type PostFrontMatter = {
   date: string; // '2022-05-31',
   author: string; // 'lucca',
   tags: string[]; // [ 'programming', 'learn-in-public' ]
+  dev_to_tags?: string[];
   cover_image?: string;
 };
 
