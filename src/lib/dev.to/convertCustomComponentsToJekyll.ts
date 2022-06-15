@@ -6,6 +6,7 @@ import { mdxFromMarkdown, mdxToMarkdown } from "mdast-util-mdx";
 import { Content, Root } from "mdast-util-from-markdown/lib";
 import { mdxjs } from "micromark-extension-mdxjs";
 import flattendeep from "lodash.flattendeep";
+import { PostFrontMatter } from "../../pages/api/publish/[postSlug]";
 
 type CustomMDXTag = {
   expression: string;
@@ -43,6 +44,11 @@ const CodeSandboxMDXComponent = {
   isThisTag: findTagByNameFunction("CodeSandbox"),
 };
 
+const VideoMDXComponent = {
+  tagName: "Video",
+  isThisTag: findTagByNameFunction("Video"),
+};
+
 function findTagByNameFunction(tagName) {
   return (token) => token.tagName === tagName;
 }
@@ -54,7 +60,10 @@ function getTokenChild(token) {
   return token;
 }
 
-export function convertCustomComponentsToJekyll(markdown: string) {
+export function convertCustomComponentsToJekyll(
+  markdown: string,
+  frontMatter: PostFrontMatter
+) {
   const flattenedTags: CustomMDXTag[] = flattendeep(
     getFileTree(markdown).children.reduce<Content[]>((allTokens, token) => {
       return [...allTokens, getTokenChild(token)];
@@ -95,17 +104,20 @@ export function convertCustomComponentsToJekyll(markdown: string) {
   convertedContent = replaceComponent({
     flattenedTags,
     markdown: convertedContent,
+    componentToReplace: VideoMDXComponent,
+    replaceWith: (tag) => {
+      return `🎥 *Original post contains a [Video](${tag.attributes.src}) available on [idkshite.com](https://idkshite.com/posts/${frontMatter.slug})*  `;
+    },
+  });
+  convertedContent = replaceComponent({
+    flattenedTags,
+    markdown: convertedContent,
     componentToReplace: CodeSandboxMDXComponent,
     replaceWith: (tag) => {
       return `{% codesandbox ${tag.attributes.url} %}`;
     },
   });
   return convertedContent;
-
-  /*let convertedContent = content
-    convertedContent = replaceComponent({name:"Link", tagName: "Link", selfClosing: false} , convertedContent, (tag) => `[${tag.content}](${tag.attributes.url})`);
-    return replaceComponent({name: "Replit", tagName: "Replit", selfClosing: true }, convertedContent, (tag) => `{% replit ${tag.attributes.url} %}`);
-    // return replaceComponent({name: "ImgWithText", tagName: "ImgWithText", selfClosing: false } , convertedContent, (tag) => `![${tag.attributes?.alt ?? "no alt tag provided"}](${tag.attributes.url}.jpg)`);*/
 }
 
 function getFileTree(content: string) {

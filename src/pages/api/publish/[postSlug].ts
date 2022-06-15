@@ -38,7 +38,10 @@ export default async function handler(req, res) {
     });
     const frontMatter = data as PostFrontMatter;
 
-    const cleanedContent = convertCustomComponentsToJekyll(content);
+    const cleanedContent = convertCustomComponentsToJekyll(
+      content,
+      frontMatter
+    );
 
     let result;
     try {
