@@ -1,0 +1,40 @@
+---
+slug: alter-key-value
+title: How to replace object key/value pair with .map
+subtitle: Replace a key and value pair in a javascript object with .map
+date: 2022-06-16
+author: lucca
+tags:
+  - programming
+  - learn-in-public
+---
+
+The `.map()` method is a super valuable tool to transform arrays in JavaScript.
+Sometimes I wish the same would exist for objects as well.
+During a code review today I stumbled over this practical piece that applies `.map()` to an object.
+
+## `.map()` over an object
+
+In this example we're turning the `timestampSeconds` on the `clientEvent` into a timestamp with milliseconds by altering the key and value of this object property.
+
+```ts
+const clientEvent = Object.fromEntries(
+    Object.entries(serverEvent).map(([key, value]) =>
+      key === "timestampSeconds"
+        ? ["timestampMillis", secondsToMilliseconds(value)]
+        : [key, value]
+    )
+  );
+```
+<mark>▶️ Check out the Replit for the whole code example and run it to see it in action</mark>
+
+<Replit url="https://replit.com/@idkshite/altering-object-property-keyvalue"/>
+
+The idea behind it is.
+1. Turn an object into an array with `Object.entries()`. The object is now an array of arrays with key/value pairs (a [couple](https://en.wikipedia.org/wiki/Tuple)). It looks like this: `[[key,value],[key,value],[key,value],[key,value]]`
+2. As your object is now an array, you can map over it and return the altered couples.
+3. Once all couples have been altered you can reconstruct the object with `Object.fromEntries()`
+
+
+
+
