@@ -12,6 +12,7 @@ import { listTags } from "../lib/tags";
 import { VERTICAL_MARGIN } from "../../public/styles/font";
 import { ViewerLocations } from "../components/ViewerLocations";
 import { Client } from "@notionhq/client";
+import { QueryDatabaseResponse } from "@notionhq/client/build/src/api-endpoints";
 
 export default function Index({ posts, tags, pagination, flags }) {
   return (
@@ -100,7 +101,8 @@ async function getCountryFlagsWhoVisited() {
 
   const countries = notionResponse.results
     .map((page) => {
-      return page?.icon?.emoji;
+      if ("icon" in page && "emoji" in page.icon) return page?.icon?.emoji;
+      return false;
     })
     .filter((flag) => flag && flag !== "💩");
   const distinctFlags = Array.from(new Set(countries));
