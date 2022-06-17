@@ -96,9 +96,10 @@ export function convertCustomComponentsToJekyll(
     markdown: convertedContent,
     componentToReplace: ImgWithTextMDXComponent,
     replaceWith: (tag) => {
-      return `![${tag.content ?? "no alt tag provided"}](${
-        tag.attributes.url
-      }.jpg)`;
+      console.log("tag", tag);
+      return `<figure><img src="${tag.attributes.url}.jpg}" alt="${
+        tag.attributes?.alt ?? "no alt tag provided"
+      }"><figcaption>${tag.content}</figcaption></figure>`;
     },
   });
   convertedContent = replaceComponent({
@@ -224,6 +225,8 @@ function getContent(token) {
   const flattenedChildrenWithValue = flattendeep(getTokenChild(token)).filter(
     (token) => token?.value
   );
+  console.log("fat white", flattendeep(getTokenChild(token)));
+  console.log("flattenedChildrenWithValue", flattenedChildrenWithValue);
 
   return flattenedChildrenWithValue.reduce((content, child) => {
     return content + " " + child.value.trim();

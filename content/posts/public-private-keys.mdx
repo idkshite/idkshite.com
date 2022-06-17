@@ -6,6 +6,11 @@ date: 2020-06-05
 author: lucca
 tags:
  - learn-in-public
+dev_to_tags:
+ - webdev
+ - beginners
+ - javascript
+ - security
 ---
 
 With the power of cryptography, you can turn perfectly readable content into incomprehensible garbage. Great for hiding your secret "guilty pleasure" playlist from prying eyes.
@@ -22,23 +27,18 @@ This is where `public` and `private keys` come into play.
 ## Encryption
 Imagine instead of `1 key` you know have `2 keys`.
 
-<ImgWithText style={{height:"200px",width: "auto"}} url={"https://imgur.com/NvE13bf"} alt={"smeagol my private key"}>
-    Your private key is your own little secret You never share it with anyone
-</ImgWithText>
+<ImgWithText style={{height:"200px",width: "auto"}} url={"https://imgur.com/NvE13bf"} alt={"smeagol my private key"}>Your private key is your own little secret You never share it with anyone</ImgWithText>
 
-<ImgWithText style={{height:"200px",width: "auto"}} url={"https://imgur.com/J2K1eee"} alt={"spreading public key"}>
-    Your public key on the other hand should be openly shared.
-</ImgWithText>
+<ImgWithText style={{height:"200px",width: "auto"}} url={"https://imgur.com/J2K1eee"} alt={"spreading public key"}>Your public key on the other hand should be openly shared.</ImgWithText>
 
-Those `2 keys` are created from the same function and are inherently connected.
-You can encrypt messages with your `private key` and decrypt them with your `public key`.
-But wait? If everyone has your `public key`, anyone can decrypt your messages.
-This doesn't sound secure at all. But stick with me.
+Those `2 keys` are created from the same function and are inherently connected. You can encrypt messages with your `private key` and decrypt them with your `public key`.
+
+But wait? If everyone has your `public key`, anyone can decrypt your messages. This doesn't sound secure at all. But stick with me.
+
 One can also encrypt a `message` with your `public key` and decrypt it with the matching `private key`.
 It starts to make more sense if we introduce a second pair of keys for your friend. An example will shed light on this.
 
-You want to send your *"guilty pleasure playlist"* to your friend Mathilda, but you are concerned by the thought that someone could read the playlist's content while it's being transmitted.
-To protect the `message`, you encrypt it with your friends `public key`. Now the `message` can only be decrypted with her `private key`. So only she can read it. Profit!
+You want to send your *"guilty pleasure playlist"* to your friend Mathilda, but you are concerned by the thought that someone could read the playlist's content while it's being transmitted. To protect the `message`, you encrypt it with your friends `public key`. Now the `message` can only be decrypted with her `private key`. So only she can read it. Profit!
 
 ### Interactive node.js message encryption
 <Replit url="https://replit.com/@idkshite/encryption" filename={"index.js"}/>
