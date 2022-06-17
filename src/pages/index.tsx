@@ -10,57 +10,100 @@ import { countPosts, listPostContent } from "../lib/posts";
 import config from "../lib/config";
 import { listTags } from "../lib/tags";
 import { VERTICAL_MARGIN } from "../../public/styles/font";
+import { ViewerLocations } from "../components/ViewerLocations";
+import { Client } from "@notionhq/client";
 
-export default function Index({ posts, tags, pagination }) {
+export default function Index({ posts, tags, pagination, flags }) {
   return (
-    <Layout>
-      <BasicMeta url={"/"} />
-      <OpenGraphMeta url={"/"} />
-      <TwitterCardMeta url={"/"} />
-      <div className="container">
-        <div className={"content"}>
-          <div className={"logo"}>
-            <Logo></Logo>
+    <>
+      <Layout>
+        <BasicMeta url={"/"} />
+        <OpenGraphMeta url={"/"} />
+        <TwitterCardMeta url={"/"} />
+        <div className="container">
+          <div className={"content min-h-screen"}>
+            <div className={"logo"}>
+              <Logo></Logo>
+            </div>
+            <h1 className="title2 title">“I don’t know shite about...”</h1>
+            <p>
+              I often realize I don't know shite about certain concepts,
+              technologies and processes that I should understand. I have a
+              superficial understanding but not enough in depth knowledge to be
+              productive.
+            </p>
+            <p>
+              This blog aims to educate myself to close knowledge gaps and "know
+              my shite".
+            </p>
+            {flags.length >= 3 ? (
+              <div className="flex w-full">
+                <ViewerLocations flags={flags} />
+              </div>
+            ) : null}
           </div>
-          <h1 className="title2 title">“I don’t know shite about...”</h1>
-          <p>
-            I often realize I don't know shite about certain concepts,
-            technologies and processes that I should understand. I have a
-            superficial understanding but not enough in depth knowledge to be
-            productive.
-          </p>
-          <p>
-            This blog aims to educate myself to close knowledge gaps and "know
-            my shite".
-          </p>
+
+          <style jsx>
+            {`
+              .logo {
+                margin-bottom: ${VERTICAL_MARGIN.DEFAULT}px;
+                max-width: 300px;
+                min-width: 100px;
+              }
+              .title {
+                margin-bottom: ${VERTICAL_MARGIN.DEFAULT}px;
+              }
+              .container {
+                display: flex;
+                align-items: center;
+                justify-content: center;
+                flex: 1 1 auto;
+                padding: 0 1.5rem;
+              }
+              .content {
+                display: flex;
+                flex-direction: column;
+                align-items: center;
+                justify-content: center;
+                max-width: 547px;
+              }
+            `}
+          </style>
         </div>
-        <style jsx>
-          {`
-            .logo {
-              margin-bottom: ${VERTICAL_MARGIN.DEFAULT}px;
-              max-width: 300px;
-              min-width: 100px;
-            }
-            .title {
-              margin-bottom: ${VERTICAL_MARGIN.DEFAULT}px;
-            }
-            .container {
-              display: flex;
-              align-items: center;
-              justify-content: center;
-              flex: 1 1 auto;
-              padding: 0 1.5rem;
-            }
-            .content {
-              display: flex;
-              flex-direction: column;
-              align-items: center;
-              justify-content: center;
-              max-width: 547px;
-            }
-          `}
-        </style>
-      </div>
-    </Layout>
+      </Layout>
+    </>
   );
+}
+
+export async function getStaticProps() {
+  return {
+    props: {
+      flags: await getCountryFlagsWhoVisited(),
+    },
+  };
+}
+
+async function getCountryFlagsWhoVisited() {
+  const notion = new Client({
+    auth: process.env.NOTION_API_TOKEN,
+  });
+
+  const notionResponse = await notion.databases.query({
+    database_id: process.env.ANALYTICS_NOTION_DATABASE_ID,
+    sorts: [
+      {
+        property: "Country",
+        direction: "ascending",
+      },
+    ],
+  });
+
+  const countries = notionResponse.results
+    .map((page) => {
+      return page?.icon?.emoji;
+    })
+    .filter((flag) => flag && flag !== "💩");
+  const distinctFlags = Array.from(new Set(countries));
+
+  return distinctFlags;
 }
