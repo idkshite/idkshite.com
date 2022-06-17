@@ -1,0 +1,37 @@
+---
+slug: lazy-state-init
+title: Prevent useState initializer reruns
+subtitle: set useState default value only once on initial render
+date: 2022-06-17
+author: lucca
+tags:
+  - programming
+  - learn-in-public
+---
+
+Imagine you have an expensive operation that prefills the initial value of your useState in React.
+With the default way the function providing your initial value would be executed on each rerender.
+
+## Default way of setting state
+```ts
+const [audioURL, setAudioURL] = useState(expensiveOperation());
+```
+
+In this example we're "calculating" the source url for and audio sample in `expensiveOperation()` and setting it as the default value of `audioURL`.
+If this was a truly "expensive operation" it would slow down your application on every rerender.
+<mark>▶️ Execute this Replit, keep the browser console open and write something into the input to see how the `expensiveOperation()` gets called with every rerender.</mark>
+<Replit url="https://replit.com/@idkshite/react-state-lazy-initialization-broken"/>
+
+## Setting state as a function
+
+In order to prevent all these reruns of `expensiveOperation()` we can initialize `useState` with a function instead.
+```ts
+const [audioURL, setAudioURL] = useState(() => expensiveOperation());
+```
+
+<mark>▶️ Execute this Replit, keep the browser console open and write something into the input to see how the `expensiveOperation()` gets called only once 🥳.</mark>
+<Replit url="https://replit.com/@idkshite/react-state-lazy-initialization-fixed"/>
+
+Now the `expensiveOperation()` is only run once on the initial render. Your application will not be slowed down by subsequent initializations 🥳.
+
+
