@@ -1,0 +1,110 @@
+---
+slug: long-hover-csharp
+title: How to detect a long hover in Godot with C#
+subtitle: Use Task.Delay and _cancelTokenSource.Cancel() to detect a long hover
+date: 2022-06-18
+author: lucca
+tags:
+  - godot
+  - csharp
+  - programming
+  - learn-in-public
+---
+
+While trying out the <Link url="https://godotengine.org/">Godot Engine</Link>
+I wanted to implement a custom "long hover" event.
+The event **is fired** if the user hovers over a button for 3 seconds.
+The event **shouldn't fire** if the user stops hovering before the 3 seconds have ended.
+
+The logic for the event emission is contained inside the `MaybeEmitSuperHover` method.
+I'm running `MaybeEmitSuperHover()` inside the `_Process` method to check if the button is still hovered on every single frame.
+
+This is the class that is attached to the Button inside the Godot project.
+```csharp
+using Godot;
+using System.Threading;
+using System.Threading.Tasks;
+
+public class ButtonBehaviour : Button
+{
+    private CancellationTokenSource _cancellationTokenSource;
+
+    [Signal]
+    public delegate void SuperHover();
+
+    private void MaybeEmitSuperHover()
+    {
+        var hasActiveTimer = _cancellationTokenSource != null;
+
+        // (3.) Reset the timer if button isn't hovered
+        if (!IsHovered())
+        {
+            if (hasActiveTimer)
+            {
+                _cancellationTokenSource.Cancel();
+                _cancellationTokenSource = null;
+            }
+
+            return;
+        }
+
+        // (2.) Do nothing if there is an active timer while hovering
+        if (hasActiveTimer) return;
+
+        // (1.) Create a new Delayed Task (timer)
+        _cancellationTokenSource = new CancellationTokenSource();
+        Task.Delay(3000).ContinueWith(async (t) =>
+        {
+            GD.Print("SUPER HOVER");
+            EmitSignal("SuperHover");
+        }, _cancellationTokenSource.Token);
+    }
+
+    public override void _Process(float delta)
+    {
+        MaybeEmitSuperHover();
+    }
+}
+```
+## `MaybeEmitSuperHover()` explained
+
+The function is best read, block by block, from bottom to top.
+We detect if the user hovers over the button during the current frame with `IsHovered`.
+### (1.) Create a new Delayed Task (timer)
+In this block we already know that the user is Hovering over the button and doesn't have an active timer.
+As we can't find an existing timer reference inside `_cancellationTokenSource` we create a new timer with `Task.Delay(3000).ContinueWith(...)` and store a reference in `_cancellationTokenSource`.
+This is necessary because we need `_cancellationTokenSource` to Cancel the timer later.
+
+### (2.) Do nothing if there is an active timer while hovering
+We do nothing (early return) if the button is hovered but there is already an existing timer.
+This prevents that we create additional timers if there is already one running.
+
+### (3.) Reset the timer if button isn't hovered
+If the button isn't hovered we generally don't want to do anything, except if there is a reference to the current timer inside `_cancellationTokenSource`.
+This means we need to cancel the timer and reset the reference because:
+* If the timer **hasn't elapsed** yet but the user has stopped hovering, we don't want to fire the event. So we need to Cancel it prematurely.
+* If the timer **has elapsed** we need to reset its reference to `null` so we can set a new one, once the user hovers again.
+
+In this example we printed the appearance of the `SuperHover` event with:
+```csharp
+GD.Print("SUPER HOVER")
+```
+In a real game you would probably emit a custom event.
+To emit the `SuperHover` event we first need register it and manually emit it:
+```csharp
+// register the event
+[Signal]
+public delegate void SuperHover();
+
+// emit the event
+EmitSignal("SuperHover");
+```
+
+This way you can react to the event in another Class, Node or Scene.
+
+
+
+
+
+
+

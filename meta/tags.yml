@@ -1,11 +1,17 @@
 tags:
   - slug: german
-    name: german
+    name: German
   - slug: meta-learning
-    name: meta-learning
+    name: Meta-Learning
   - slug: learn-in-public
-    name: learn in public
+    name: Learn in Public
   - slug: debugging
-    name: debugging
+    name: Debugging
   - slug: programming
-    name: programming
+    name: Programming
+  - slug: javascript
+    name: JavaScript
+  - slug: csharp
+    name: C#
+  - slug: godot
+    name: Godot Engine
