@@ -85,12 +85,44 @@ export async function getStaticProps() {
 }
 
 async function getCountryFlagsWhoVisited() {
+  const results = await getAllResultsFromAnalyticsDB();
+
+  const countries = results
+    .map((page) => {
+      if ("icon" in page && "emoji" in page.icon) return page?.icon?.emoji;
+      return false;
+    })
+    .filter((flag: string | boolean) => flag && flag !== "💩");
+  const distinctFlags = Array.from(new Set(countries));
+
+  return distinctFlags;
+}
+// TODO: this is broken and will not yield the whole db. its good enough for now but need fixing
+// TODO: Make this less imperative
+async function getAllResultsFromAnalyticsDB() {
+  let start_page_id; // notion will start requesting pages from the db starting with this page
+  let results = [];
+  let currentResponse = await getPaginatedResultsFromAnalyticsDB(start_page_id);
+  console.log("currentResponse", currentResponse.length);
+  while (currentResponse.length === 100) {
+    results = [...results, ...currentResponse];
+    start_page_id = (
+      currentResponse[currentResponse.length - 1] as { id: string }
+    ).id;
+    currentResponse = await getPaginatedResultsFromAnalyticsDB(start_page_id);
+  }
+  return results;
+}
+
+async function getPaginatedResultsFromAnalyticsDB(start_page_id, limit = 100) {
   const notion = new Client({
     auth: process.env.NOTION_API_TOKEN,
   });
 
   const notionResponse = await notion.databases.query({
     database_id: process.env.ANALYTICS_NOTION_DATABASE_ID,
+    start_cursor: start_page_id,
+    page_size: limit,
     sorts: [
       {
         property: "Country",
@@ -98,14 +130,5 @@ async function getCountryFlagsWhoVisited() {
       },
     ],
   });
-
-  const countries = notionResponse.results
-    .map((page) => {
-      if ("icon" in page && "emoji" in page.icon) return page?.icon?.emoji;
-      return false;
-    })
-    .filter((flag) => flag && flag !== "💩");
-  const distinctFlags = Array.from(new Set(countries));
-
-  return distinctFlags;
+  return notionResponse.results as {}[];
 }
