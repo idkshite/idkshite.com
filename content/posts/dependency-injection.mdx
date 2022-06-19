@@ -1,0 +1,29 @@
+---
+slug: dependency-injection
+title: What the heck is dependency injection?
+subtitle: Decouple your code with dependency injection
+date: 2022-06-19
+author: lucca
+tags:
+  - javascript
+  - programming
+  - learn-in-public
+---
+
+Since the verge of AngularJS "Dependency Injection" always used to be a scary term to me.
+I had no clue what it actually meant and dismissed it as some kind of black magic executed by the framework, which I don't need to care about.
+Today I found out that "Dependency Injection" is actually quite a transparent principle that helps decoupling your code.
+
+## So what does it mean?
+Dependency Injection can be used to **decouple a dependency from its consumer**.
+Let's say your have a function or class, and you need to access some service inside of there.
+You could directly use (import) this service which would work fine.
+But if you want to have the option to replace this service flexibly you're out of luck.
+With dependency injection you simply pass the service into your function as a parameter and use it from there.
+This way you can exchange the dependency (here it's the service) as you wish.
+
+## Dependency Injection in TypeScript
+In this example you can see that "injecting" the service function from the outside into the `useTheService` function allows you to pass in `service1` or `service2` flexibly.
+
+<Replit url="https://replit.com/@idkshite/Dependency-Injection"/>
+
