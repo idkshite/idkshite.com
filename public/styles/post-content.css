@@ -7,6 +7,10 @@
         @apply break-words
     }
 
+    .content summary {
+        @apply text-xl
+    }
+
     .content p, .content mark {
         @apply text-xl inline-block mb-3 leading-9
     }
@@ -52,7 +56,8 @@
     }
 
     .content .rich-content,
-    .content .remark-highlight {
+    .content .remark-highlight,
+    .content summary {
         @apply mb-4;
     }
 

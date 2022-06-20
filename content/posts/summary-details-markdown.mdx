@@ -1,0 +1,54 @@
+---
+slug: summary-details-markdown
+title: Hide and Reveal with pure HTML
+subtitle: Use <Details> + <Summary> to structure and hide your content
+date: 2022-06-20
+author: lucca
+tags:
+  - programming
+  - learn-in-public
+---
+
+I truly appreciate using toggles in Notion. They are a great way to structure a file by hiding information you don't need to see immediately.
+Like I did in my post about ["Debugging by talking to yourself"](/posts/favourite-debugging-method).
+
+But I sometimes forget this feature is built into HTML through the `<details>` and `<summary>` tag.
+And it's not exclusive to HTML. Markdown editors like the GitHub markdown editor even support it.
+So your next Pull Request can contain some hidden gifs 🥸
+
+```html
+<details>
+    <summary>Some huge ass content</summary>
+    Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id est laborum.
+    Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id est laborum.
+</details>
+```
+
+### Here you can see it in action.
+
+<details>
+    <summary>Some unwieldy content that is waaaay too big to display it all at once...</summary>
+    <img className="mb-3" src="https://media3.giphy.com/media/NdKVEei95yvIY/giphy.gif?cid=ecf05e47jzfco44zbeut526rv4pzlk9y3u7uyy5kqpq6u1e7&rid=giphy.gif&ct=g"/>
+    <details>
+        <summary>Nesting is possible too!</summary>
+        <img className="mb-3" src="https://media3.giphy.com/media/NdKVEei95yvIY/giphy.gif?cid=ecf05e47jzfco44zbeut526rv4pzlk9y3u7uyy5kqpq6u1e7&rid=giphy.gif&ct=g"/>
+        <details>
+            <summary>Keep on nesting!</summary>
+            <img className="mb-3" src="https://media3.giphy.com/media/NdKVEei95yvIY/giphy.gif?cid=ecf05e47jzfco44zbeut526rv4pzlk9y3u7uyy5kqpq6u1e7&rid=giphy.gif&ct=g"/>
+            <details>
+                <summary>Nest it like its hot!</summary>
+                <img className="mb-3" src="https://media3.giphy.com/media/NdKVEei95yvIY/giphy.gif?cid=ecf05e47jzfco44zbeut526rv4pzlk9y3u7uyy5kqpq6u1e7&rid=giphy.gif&ct=g"/>
+                <details>
+                    <summary>MORE!</summary>
+                    <img className="mb-3" src="https://media3.giphy.com/media/NdKVEei95yvIY/giphy.gif?cid=ecf05e47jzfco44zbeut526rv4pzlk9y3u7uyy5kqpq6u1e7&rid=giphy.gif&ct=g"/>
+                    <details>
+                        <summary>I'm proud of you</summary>
+                        <img className="mb-3" src="https://media0.giphy.com/media/NEvPzZ8bd1V4Y/giphy.gif?cid=ecf05e47c1db475ac3b0b73ac2f21c524eafd62fdebe76b1&rid=giphy.gif&ct=g"/>
+                    </details>
+                </details>
+            </details>
+        </details>
+    </details>
+</details>
+
+It may not look sexy, but if you need to hide some content to increase the readability of a file, it's a great choice.
