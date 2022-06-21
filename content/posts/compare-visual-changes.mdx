@@ -1,0 +1,45 @@
+---
+slug: compare-visual-changes
+title: Poor man's visual regression testing
+subtitle: Compare visual changes between localhost and production. Detect CSS changes
+date: 2022-06-21
+author: lucca
+tags:
+  - css
+  - programming
+  - learn-in-public
+---
+
+Let's assume you've made some big changes to some global css styles in your web application.
+You're unsure whether these changes broke any of your meticulously crafted pages.
+
+You could set up automatic visual regression testing on your CI pipeline with tools from the ["Awesome Visual Regression Testing"](https://github.com/mojoaxel/awesome-regression-testing) list.
+That would probably be the safest option. But it requires some setup and time to get used to the tools.
+
+You don't have time for that right now? Then let me introduce you to...
+
+## Manual Regression Testing
+The idea is: **Take a screenshot** from a known working state of your webapp. For example your production environment. Then take this screenshot and **overlay it** on top of your potentially broken state of your webapp.
+In this example I'm using the chrome plugins
+* [screenshot-capture](https://chrome.google.com/webstore/detail/screenshot-capture/giabbpobpebjfegnpcclkocepcgockkc) - to get a **screenshot into my clipboard**
+* [PerfectPixel](https://chrome.google.com/webstore/detail/perfectpixel-by-welldonec/dkaagdgjmgdmbnecmcefdhjekcoceebi) - to **overlay the screenshot** on top of the development page
+
+First I configured [screenshot-capture](https://chrome.google.com/webstore/detail/screenshot-capture/giabbpobpebjfegnpcclkocepcgockkc) to copy the screenshot into my clipboard and to use a different shortcut as the default one (`OPTION + S`) was already occupied by [PerfectPixel](https://chrome.google.com/webstore/detail/perfectpixel-by-welldonec/dkaagdgjmgdmbnecmcefdhjekcoceebi).
+<ImgWithText url="https://imgur.com/mCE76DH">screenshot-capture plugin configuration to copy into clipboard</ImgWithText>
+
+### Prepare your browser
+Then I prepare my browser to have both (local and production environment) open in equal sized browser windows.
+It's important those pages have the **same viewport size** as comparing differently sized images will just make the process more complicated.
+This also means the devtools need to be closed during the screenshot and comparison.
+If the screenshot doesn't have the same size as the viewport of your browser window, you would need to manually position the screenshot later.
+
+### Screenshot and compare
+Next I take a screenshot of my production webapp running on `https://idkshite.com` (with `OPTION + SHIFT + S`).
+This screenshot is now in my clipboard. I can switch to `http://localhost:3000/` and open [PerfectPixel](https://chrome.google.com/webstore/detail/perfectpixel-by-welldonec/dkaagdgjmgdmbnecmcefdhjekcoceebi) to click on the `paste from clipboard` link.
+Now the screenshot of the reference page (production environment) should sit on top of the viewport of your localhost browser window.
+Feel free to play around with the opacity slider to get an impression of how those changes differ.
+Or turn your screenshot into a negative with `OPTION + i` to get a stronger contrast.
+
+<Video src="https://cleanshot-cloud-fra.accelerator.net/media/23887/3R1gRpXqGR7WqsB5av4iCsH42mVjZPIAduwZLnrw.mp4"/>
+
+In the long run I would probably invest in some automated regression testing, but as a provisional arrangement it's way more reliable than just glancing over visual changes. 👨‍🎨
