@@ -2,7 +2,7 @@ export function ViewerLocations({ flags }: { flags: string[] }) {
   return (
     <div className="opacity-60">
       <em className="block mb-small">
-        idkshite.com already helped readers from:
+        idkshite.com already helped readers (and bots) from:
       </em>
       <div className="flex flex-wrap">
         {flags.map((flag) => {
