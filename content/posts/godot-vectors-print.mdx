@@ -1,0 +1,76 @@
+---
+slug: godot-vectors-print
+title: Visualize Vectors in Godot
+subtitle: Draw a line in Godot and display a nodes position
+date: 2022-06-22
+author: lucca
+cover_image: https://i.imgur.com/Q51fiSA.gif
+tags:
+  - csharp
+  - godot
+  - gamedev
+  - programming
+  - learn-in-public
+---
+
+In this post I showcase how little shite I know about game development.😅
+It's a simple example of how you can draw a line in Godot to visualize Vectors.
+
+# Drawing some lines
+The end-result will display a graph with a vector that is pointing towards a poodle.
+Next to the poodle we will display it's current position in vector space.
+
+<Video src="https://cleanshot-cloud-fra.accelerator.net/media/23887/sZLUHkOLG1N8vCRvFkQAR0FWciB55wORvxBqCjsA.mp4"/>
+
+The demo consists of 2 scripts.
+* `VectorsInSpace.cs` which is attached to the root node of the scene and draws the graph and vector lines.
+* `PoodleBehaviour.cs` which is attached to the Poodle Sprite node and sets the text of the label next to the Poodle.
+
+## `VectorsInSpace.cs`
+```csharp
+
+using Godot;
+
+public class VectorsInSpace : Node2D
+{
+    private Sprite _poodle;
+
+    public override void _Draw()
+    {
+        DrawLine(new Vector2(0, 0), new Vector2(2000, 0), Colors.Wheat, 5f);
+        DrawLine(new Vector2(0, 0), new Vector2(0, 2000), Colors.Wheat, 5f);
+
+        DrawLine(new Vector2(0, 0), _poodle.Position, Colors.DarkOrange, 3f);
+    }
+
+    public override void _Ready()
+    {
+        _poodle = GetNode<Sprite>("Poodle");
+    }
+}
+
+```
+Inside the `_Draw()` method I can call `DrawLine()` to draw a line from the first to the second vector parameter.
+The third parameter defines the color and the fourth the width of the line.
+This way the first to lines project the `X` and `Y` axis onto the screen and the third `DrawLine()` call paints the line from the origin of the graph to the poodle.
+
+## `PoodleBehaviour.cs`
+```csharp
+using Godot;
+
+public class PoodleBehaviour : Sprite
+{
+    private Label _label;
+
+    public override void _Ready()
+    {
+        _label = GetNode<Label>("Label");
+        _label.Text = $"( {Position.x} / {Position.y} )";
+    }
+}
+
+```
+Inside PoodleBehaviour.cs we only make sure that the label next to the poodle is filled with the `X` and `Y` coordinates of the Poodle Sprite.
+We get the child-node `Label` with `GetNode<Label>("Label")` and assign it the `X` and `Y` coordinates of the Poodle by using C#'s [string interpolation](https://docs.microsoft.com/en-us/dotnet/csharp/language-reference/tokens/interpolated) feature.
+
+After providing the respective nodes and attached scripts mentioned above, Godot should print you a nice Poodle infused vector visualisation.🥳
