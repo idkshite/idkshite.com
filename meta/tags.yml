@@ -19,5 +19,7 @@ tags:
     name: CSS
   - slug: godot
     name: Godot Engine
+  - slug: math
+    name: Math
   - slug: gamedev
     name: Game Development

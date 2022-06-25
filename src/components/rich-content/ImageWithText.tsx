@@ -17,12 +17,15 @@ export function ImgWithText({
   // @ts-ignore
   return (
     <>
-      <div className={`rich-content flex flex-col mb-4 items-center ${className}`}>
+      <div
+        className={`rich-content flex flex-col mb-4 items-center ${className}`}
+      >
         <Imgur
-        className="mb-2"
+          className="mb-2"
           url={url}
           alt={alt}
-          style={{...style }}
+          style={{ ...style }}
+          isWrappedInRichContentClass={true}
         />
         <p className="!text-sm">{children}</p>
       </div>
