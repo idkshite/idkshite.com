@@ -1,0 +1,80 @@
+---
+slug: rotate-string-godot
+title: Rotate your strings
+subtitle: How to rotate a string with DrawString in Godot
+date: 2022-06-26
+author: lucca
+tags:
+  - csharp
+  - godot
+  - learn-in-public
+---
+
+Godot gives you the option to render strings with `DrawString(font, position, text)` inside the `_Draw` method of your Node.
+But sadly there is no direct way to pass the rotation to this string.
+
+# How to rotate your string
+Luckily Godot offers a method that transform draw calls and rotate them.
+
+```csharp
+private void _DrawRotatedString(Vector2 position, float rotation, string text)
+    {
+        // sets this as the new reference for future Draw commands
+        DrawSetTransform(position, rotation * (float)(Math.PI/ 180),Vector2.One);
+        // Position of string is set to Vector2.Zero because DrawSetTransform already sets position
+        DrawString(_dynamicFont, Vector2.Zero, text);
+        // resets reference to global origin 0,0 without rotation
+        DrawSetTransform(Vector2.Zero, 0,Vector2.One);
+
+    }
+```
+
+Simply call `DrawSetTransform(position, rotation, scale)` before calling `DrawString()`.
+Because I pass in the string rotation as degrees into my `_DrawRotatedString` function I first have to convert it into radians with: `rotation * (float)(Math.PI/ 180)`.
+Most Godot functions handling rotation take radians instead of degrees.
+I also pass in the final position of the string into the `DrawSetTransform` function because I observed unexpected behaviour when setting the position of `DrawSetTransform()` to `Vector2.zero` and the position of `DrawString()` to the target position.
+The scale can stay at the default value, which is `Vector2.One`.
+
+Then I happily draw my string with `DrawString(_dynamicFont, Vector2.Zero, text);`
+
+Now it is of utmost importance to reset the `DrawSetTransform` back to `DrawSetTransform(Vector2.Zero, 0,Vector2.One);` which is the default setting.
+Otherwise the transform of subsequent draw calls will be shifted and rotated.
+
+For some context here is the entire class including the call of the `_DrawRotatedString` function and the import of the dynamic font.
+
+```csharp
+
+using Godot;
+using System;
+using System.Collections.Generic;
+using System.Data;
+
+public class GraphBehaviour : Node2D
+{
+    DynamicFont _dynamicFont;
+    public override void _Ready()
+    {
+        _dynamicFont = new DynamicFont();
+        _dynamicFont.FontData = GD.Load<DynamicFontData>("res://InkbitThree.ttf");
+        _dynamicFont.Size = 12;
+    }
+
+
+   public override void _Draw()
+   {
+        _DrawRotatedString(new Vector2(100,20), 90, "a 90 degree rotated label");
+   }
+
+   private void _DrawRotatedString(Vector2 position, float rotation, string text)
+   {
+        DrawSetTransform(position, rotation * (float)(Math.PI/ 180),Vector2.One);
+        DrawString(_dynamicFont, Vector2.Zero, text);
+        DrawSetTransform(Vector2.Zero, 0,Vector2.One);
+   }
+
+}
+
+```
+
+
+
