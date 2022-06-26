@@ -1,7 +1,7 @@
 import { GetStaticProps, GetStaticPaths } from "next";
-import { MDXRemote } from 'next-mdx-remote'
+import { MDXRemote } from "next-mdx-remote";
 import matter from "gray-matter";
-import {fetchPostContent, slugToPostContent} from "../../lib/posts";
+import { fetchPostContent, slugToPostContent } from "../../lib/posts";
 import fs from "fs";
 import yaml from "js-yaml";
 import { parseISO } from "date-fns";
@@ -13,10 +13,11 @@ import { CodeSandbox } from "../../components/rich-content/CodeSandbox";
 import { Replit } from "../../components/rich-content/Replit";
 import { Imgur } from "../../components/rich-content/Image";
 import { ImgWithText } from "../../components/rich-content/ImageWithText";
-import {serialize} from "next-mdx-remote/serialize";
-import {Video} from "../../components/rich-content/Video";
-import {Link} from "../../components/rich-content/Link";
-import {ReactNode} from "react";
+import { serialize } from "next-mdx-remote/serialize";
+import { Video } from "../../components/rich-content/Video";
+import { Link } from "../../components/rich-content/Link";
+import { ReactNode } from "react";
+import { MathDisclaimer } from "../../components/MathDisclaimer";
 
 export type Props = {
   title: string;
@@ -29,7 +30,7 @@ export type Props = {
   source: any;
 };
 
-const components: {[key in CustomMDXComponentName] : ReactNode }= {
+const components: { [key in CustomMDXComponentName]: ReactNode } = {
   YouTube,
   TwitterTweetEmbed,
   CodeSandbox,
@@ -38,9 +39,19 @@ const components: {[key in CustomMDXComponentName] : ReactNode }= {
   Link,
   Imgur,
   ImgWithText,
+  MathDisclaimer,
 };
 
-export type CustomMDXComponentName = "YouTube" | "TwitterTweetEmbed" | "CodeSandbox" | "Replit" | "Video" | "Link" | "Imgur" | "ImgWithText"
+export type CustomMDXComponentName =
+  | "YouTube"
+  | "TwitterTweetEmbed"
+  | "CodeSandbox"
+  | "Replit"
+  | "Video"
+  | "Link"
+  | "Imgur"
+  | "ImgWithText"
+  | "MathDisclaimer";
 
 export default function Post({
   title,
@@ -62,7 +73,7 @@ export default function Post({
       author={author}
       description={description}
     >
-      <MDXRemote {...source} components={components}/>
+      <MDXRemote {...source} components={components} />
     </PostLayout>
   );
 }
@@ -83,11 +94,12 @@ export const getStaticProps: GetStaticProps = async ({ params }) => {
       yaml: (s) => yaml.load(s, { schema: yaml.JSON_SCHEMA }) as object,
     },
   });
-  const mdxSource = await serialize(content, { scope: data, mdxOptions: {
-    remarkPlugins: [
-      require('remark-prism'),{}
-    ],
-    } });
+  const mdxSource = await serialize(content, {
+    scope: data,
+    mdxOptions: {
+      remarkPlugins: [require("remark-prism"), {}],
+    },
+  });
   return {
     props: {
       title: data.title,
