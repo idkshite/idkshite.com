@@ -1,0 +1,68 @@
+---
+slug: vanilla-graphql-query
+title: GraphQL requests ain't no magic
+subtitle: How to evaluate a graphql query with a simple POST request
+date: 2022-06-29
+author: lucca
+tags:
+  - programming
+  - javascript
+  - learn-in-public
+---
+
+If I have the choice between requesting data via a **REST API** or a **GraphQL API** I perceive the REST API as the simpler option.
+The one that causes fewer headaches. But I'm pretty sure that's mainly because I have the impression that requesting data from a GraphQL API requires a library.
+And to be honest, I haven't looked at the source code of [ApolloClient](https://www.npmjs.com/package/@apollo/client) or any other GraphQL client.
+In this post I have challenged myself to prove that I don't necessarily need a library to make a GraphQL request.
+
+## No magic involved 🧙
+
+For this example I'm fetching data from the free [countries API](https://studio.apollographql.com/public/countries/home?variant=current).
+
+I started by importing `axios` as my HTTP request library of choice. You can also use `fetch` or `https`. Whatever suits your needs, will do.
+
+Next we provide the url for the `POST` request, which is simply the graphql endpoint of the API.
+In this case `https://countries.trevorblades.com/graphql`.
+Other than that the `POST` request expects up to 3 properties passed as a `JSON` object.
+* `query`: Our GraphQL query as a string with all the desired variables and fields
+* `variables`: [Optional] In case you have variables in your query, you need to provide their value here as a `JSON` object
+* `operationName`: [Optional] Even though it's optional, it helps to identify your operations if they fail on the server
+
+```typescript
+import axios from "axios";
+
+async function getCountryData(code: "DE"|"NL"|"US"|"BR"|"BF"){
+ const response = await axios.post("https://countries.trevorblades.com/graphql", {
+  operationName: "CoolCountryOperation",
+  query: `query CoolCountryOperation($code: ID!) {
+  country(code: $code) {
+    code
+    name
+    native
+    capital
+    emoji
+    currency
+    languages {
+      code
+      name
+    }
+  }
+}`,
+variables: {code: code}
+});
+return response?.data;
+}
+
+getCountryData("BF").then(console.log).catch(console.error);
+```
+
+And as you can see in the Replit below, that's it!
+
+<Replit url="https://replit.com/@idkshite/Vanilla-GraphQL"/>
+
+Just by providing these basic properties, the `POST` requests returns your queried data without an additional library.🥳
+
+
+If you want to know more about this check-out the [blog post](https://stepzen.com/blog/consume-graphql-in-javascript) by Brian Rinaldi on StepZen.com.
+
+
