@@ -30,7 +30,7 @@
     .content h4,
     .content h5 {
 
-        @apply mb-2;
+        @apply mb-2 mt-3;
 
     }
 

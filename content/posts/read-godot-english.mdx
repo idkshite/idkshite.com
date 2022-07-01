@@ -1,0 +1,53 @@
+---
+slug: read-godot-english
+title: Force godot docs to english
+subtitle: How to rewrite urls based on regex rules
+date: 2022-07-01
+author: lucca
+tags:
+  - godot
+  - learn-in-public
+---
+
+Recently I started messing around with the [Godot Engine](https://godotengine.org/). An open source game engine for 2D and 3D games.
+Naturally I google a lot of methods and classes from their docs to get shite done.
+
+The Godot docs even support multiple languages!
+But for me this causes a small issue. Coming from germany my google search results often contain german Godot docs articles.
+Personally I'm not a fan of reading software documentation in german as I'm not used to the german translations of tech terminology.
+
+So I needed a solution to **turn german godot articles** into **english articles**.
+The Godot Docs page doesn't have a language switcher, but you can simply replace the language code in their url by your desired language code.
+
+## Redirector 🎬
+Replacing the url is boring. And boring things should be done by robots.🤖 Or something like this...
+So let me introduce you to the ["Redirector"](https://chrome.google.com/webstore/detail/redirector/ocgpenflpmgnfapjedencafcfakcekcd) chrome plugin.
+
+Redirector allows you to define rules based on which you can rewrite your opened urls into different urls. It uses regular expressions to detect and construct urls.
+
+In our case I'm using it to replace the `/de/` in `https://docs.godotengine.org/de/stable/tutorials/physics/using_kinematic_body_2d.html`
+with `/en/`.
+
+(1.) Install ["Redirector"](https://chrome.google.com/webstore/detail/redirector/ocgpenflpmgnfapjedencafcfakcekcd) from the chrome plugin page and open the configuration page (Button "Edit Redirects").
+
+(2.) Import the [Redirector.json](https://gist.github.com/idkshite/b06b9c8994cc3db2207596fd1407c6e6) rule to transform `/de/` urls to `/en/` ones.
+
+(3.) After that make sure the Redirector plugin is turned on by clicking on "Enable Redirector".
+
+(4.) If you now open a german godot docs page it should redirect you to the `/en/` version immediately. 🥳
+
+<Video src="https://cleanshot-cloud-fra.accelerator.net/media/23887/KAtho7dfA48O2gDOt63jGoLWdaQNdUsfdLF819UF.mp4"/>
+
+## Make your own rules
+You can also create your own rule from scratch to transform from different languages. Important fields are:
+
+### `Redirect:`
+Here: `(docs\.godotengine.org)\/(de)\/(.*)`
+
+The `Redirect` field defines a regex pattern to **match the url** the redirect should be applied to. You can experiment with this pattern on [Regexr.com](https://regexr.com/6oujm).
+
+### `Redirect to:`
+Here: `https://docs.godotengine.org/en/$3`
+
+The `Redirect to` field defines the url, that ["Redirector"](https://chrome.google.com/webstore/detail/redirector/ocgpenflpmgnfapjedencafcfakcekcd) should **navigate to** once it matched the url. It uses the capture groups from the `Redirect` regex.
+In this case I'm appending the third caputre group `(.*)` (everything that follows after the language code) as `$3`.
