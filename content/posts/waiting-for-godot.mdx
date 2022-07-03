@@ -1,0 +1,39 @@
+---
+slug: waiting-for-godot
+title: Awaiting for Godot
+subtitle: Wait until a Godot animation is finished with C#
+date: 2022-07-03
+author: lucca
+tags:
+  - godot
+  - csharp
+  - programming
+  - learn-in-public
+---
+
+Godot offers a rich set of Animation Tooling. It helps you to move things, size them and alter pretty much any node property you can think of.
+But those animations don't run in a vacuum. After they run you may want to run other code.
+
+But how do you know when the **animation has finished?**
+
+## Awaiting signals
+Using C# I can await signals with the `await ToSignal(...);` method. `ToSignal()` listens to the signals from the **Node** passed in as the **first argument**. In this case I'd like to listen to the `_animationPlayer`. The **second argument** determines the **signal** to listen to.
+In this case I'd like to wait until the triggered animation has finished. We can do that by listening to the `animation_finished` signal on the `_animationPlayer`.
+
+As `ToSignal()` runs asynchronously, we need to wrap our code in a function that uses the `async` keyword. Otherwise, we can't use `await`.
+After awaiting the function we can make our main character disappear or run any other code. The world is your oyster. 🦪
+
+```csharp
+ private async void Kill()
+{
+    _animationPlayer.Play("Die");
+    await ToSignal(_animationPlayer, "animation_finished");
+    _character.Visible = false
+
+}
+```
+
+There are also other ways to execute code after a signal has been triggered. For example through adding a [Call Method Track](https://docs.godotengine.org/en/latest/tutorials/animation/animation_track_types.html#call-method-tracks) in your `AnimationPlayer`. On this track you can call methods from your nodes and other scripts.
+
+But I would argue that `ToSignal()` creates more readable code as the logical flow is traceable line by line, without having to jump to the `AnimationPlayer` in Godot.
+
