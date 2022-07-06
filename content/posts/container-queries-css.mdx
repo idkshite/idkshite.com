@@ -9,14 +9,14 @@ tags:
   - learn-in-public
 ---
 
-Container queries allow you to write CSS that is responsive to the **size of the container** instead of your screen size.
-They make it possible that components control their responsive styles on their own irrespective of the size of the screen.
+Container queries allow you to write CSS that is responsive to the **size of the container** instead of the size of your screen.
+They make it possible that components control their responsive styles on their own.
 
 If you enjoy a short video introduction. Here is a (<2min) video explanation to container queries from the [State of CSS 2022](https://web.dev/state-of-css-2022/)
 <YouTube videoId="Xy9ZXRRgpLk" opts={{playerVars: {start: 195, end: 308}}} />
 
 ## How to use container queries?
-For basic usage you define an element as container your container.
+For basic usage you define an element as your container.
 
 ```css
 .almighty-sizer-box {
@@ -46,7 +46,7 @@ At the publishing date the of this post the browser support for container querie
 <img className="rich-content" src="https://caniuse.bitsofco.de/image/css-container-queries.png"/>
 
 If you want to use container queries right now, head over and grab the [Polyfill from GoogleChromeLabs](https://github.com/GoogleChromeLabs/container-query-polyfill), which is compatible with all modern browsers.
-Sadly at the publishing date of this post I couldn't get the polyfill work with "named container queries"  but maybe that will change in the future.
+Sadly at the publishing date of this post I couldn't get the polyfill to work with "named container queries". Hopefully that will change in the future.
 
 ## Example Usage
 In this example I took the `.almighty-sizer-box` from above and squeezed it into a `200px` and a `400px` container.
