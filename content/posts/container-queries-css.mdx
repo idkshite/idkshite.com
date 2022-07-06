@@ -1,0 +1,60 @@
+---
+slug: container-queries-css
+title: Container Queries in CSS
+subtitle: What are container queries?
+date: 2022-07-06
+author: lucca
+tags:
+  - css
+  - learn-in-public
+---
+
+Container queries allow you to write CSS that is responsive to the **size of the container** instead of your screen size.
+They make it possible that components control their responsive styles on their own irrespective of the size of the screen.
+
+If you enjoy a short video introduction. Here is a (<2min) video explanation to container queries from the [State of CSS 2022](https://web.dev/state-of-css-2022/)
+<YouTube videoId="Xy9ZXRRgpLk" opts={{playerVars: {start: 195, end: 308}}} />
+
+## How to use container queries?
+For basic usage you define an element as container your container.
+
+```css
+.almighty-sizer-box {
+  container-type: inline-size;
+}
+```
+After that you can define `@container` queries for your container, similar to the `@media` queries.
+In this case I changed the font size of the box to be responsive to the size of the container and changed the padding and background color for better visual distinction.
+
+```css
+@container (max-width: 350px) {
+  .almighty-sizer-box .inside {
+    background-color: #3a475c;
+    padding: 24px 16px;
+  }
+  .title {
+    font-size: 24px;
+  }
+  .text {
+    font-size: 12px;
+  }
+}
+```
+
+At the publishing date the of this post the browser support for container queries is still **"not really there"**.
+
+<img className="rich-content" src="https://caniuse.bitsofco.de/image/css-container-queries.png"/>
+
+If you want to use container queries right now, head over and grab the [Polyfill from GoogleChromeLabs](https://github.com/GoogleChromeLabs/container-query-polyfill), which is compatible with all modern browsers.
+Sadly at the publishing date of this post I couldn't get the polyfill work with "named container queries"  but maybe that will change in the future.
+
+## Example Usage
+In this example I took the `.almighty-sizer-box` from above and squeezed it into a `200px` and a `400px` container.
+Both boxes are using the same style definition. But through container queries they receive different styles. 🥳
+*This example runs the GoogleChromeLabs polyfill, so you should see the container queries in action.*
+<CodeSandbox url="https://codepen.io/idkshite/embed/KKoVyow" />
+
+If you're longing for a more complex example. Take a look at the [Container Queries Example by Una Kravets](https://web.dev/new-responsive/#container-query-cards).
+*I forked the example from codepen to embed the polyfill*
+
+<CodeSandbox url="https://codepen.io/idkshite/embed/bGvEYBz" />

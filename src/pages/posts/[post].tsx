@@ -7,7 +7,7 @@ import yaml from "js-yaml";
 import { parseISO } from "date-fns";
 import PostLayout from "../../components/PostLayout";
 
-import YouTube from "react-youtube";
+import YouTube from "../../components/rich-content/YouTubeWrapper";
 import { TwitterTweetEmbed } from "react-twitter-embed";
 import { CodeSandbox } from "../../components/rich-content/CodeSandbox";
 import { Replit } from "../../components/rich-content/Replit";
