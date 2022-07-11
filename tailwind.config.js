@@ -1,20 +1,17 @@
 module.exports = {
-  safelist: [
-    "!mb-0",
-    "mb-0"
-  ],
+  safelist: ["!mb-0", "md:w-1/2", "md:mx-auto", "mb-0"],
   content: [
     "./src/**/*.{html,js,jsx,ts,tsx,css}",
     "./public/**/*.{html,js,jsx,ts,tsx,css}",
-    "./content/posts/*.{mdx}" // doesn't work reliably. currently safe-listing classes directly used in mdx files
+    "./content/posts/*.{mdx}", // doesn't work reliably. currently safe-listing classes directly used in mdx files
   ],
   theme: {
     fontFamily: {
-      'display': ['Jost',"sans-serif"],
-      'body':  ['Jost',"sans-serif"],
+      display: ["Jost", "sans-serif"],
+      body: ["Jost", "sans-serif"],
     },
     spacing: {
-      "small": "4px",
+      small: "4px",
       0: "0px",
       1: "8px",
       2: "16px",
@@ -29,7 +26,7 @@ module.exports = {
       11: "88px",
       12: "96px",
       13: "104px",
-      14: "112px"
+      14: "112px",
     },
     extend: {
       colors: {
@@ -37,8 +34,8 @@ module.exports = {
         "default-title": "#4B4A4A",
         "subtle-label": "#CDCDCD",
         "very-subtle-label": "#ededed",
-      }
+      },
     },
   },
   plugins: [],
-}
+};

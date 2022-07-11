@@ -1,0 +1,96 @@
+---
+slug: command-output-file
+title: Dump command output into a file
+subtitle: Write your command output to a file using stderr and stdin
+date: 2022-07-11
+author: lucca
+tags:
+  - programming
+  - debugging
+  - learn-in-public
+---
+
+Sometimes I need a bit more control over the output of commands. Maybe I want to analyze the error messages from a build process.
+This is when `stdin`, `stdout` and `stderr` come in handy.
+* `stdin` is the input of the command.
+* `stdout` is the output of the command.
+* `stderr` contains errors (and maybe warnings).
+
+Technically the author of a command line tool can also return errors from `stdout` and normal output from `stderr` but conventionally the output is handled like above.
+
+<ImgWithText url="https://imgur.com/jrI66xq" alt="stdin, stdout and stderr" className={"md:w-1/2 md:mx-auto"}>
+    Input and output of a command can be controlled with stdin, stdout and stderr.
+</ImgWithText>
+
+In my example I would like to write the output of a next.js build process (`npm run build`) to a file.
+I have multiple options to do so depending on what part of the output I'd like to focus on.
+
+##  Log `stdout` to a file
+
+```bash
+  npm run build > temporaryDumpFile.txt
+```
+`>` (shorthand for `1>`) will redirect the `stdout` of the build command to the `temporaryDumpFile.txt` file
+This way the console only contains errors and warnings and the temporaryDumpFile.txt has all the informational logs.
+
+#### `temporaryDumpFile.txt`
+```txt
+> idkshite-blog@0.1.1 build
+> next build
+
+info  - Loaded env from /Users/lucca/Documents/repos/idkshite.com/.env
+info  - Using webpack 5. Reason: Enabled by default https://nextjs.org/docs/messages/webpack5
+info  - Checking validity of types...
+info  - Creating an optimized production build...
+info  - Compiled successfully
+info  - Collecting page data...
+```
+
+#### `terminal`
+```bash
+warn  - No ESLint configuration detected. Run next lint to begin setup
+
+warn - The glob pattern ./content/posts/*.{mdx} in your Tailwind CSS configuration is invalid.
+warn - Update it to ./content/posts/*.mdx to silence this warning.
+
+> Build error occurred
+Error: slug field not match with the path of its content source
+    at /Users/lucca/Documents/repos/idkshite.com/.next/server/chunks/521.js:53:13
+    at Array.map (<anonymous>)
+    at fetchPostContent (/Users/lucca/Documents/repos/idkshite.com/.next/server/chunks/521.js:36:68)
+    at 7521 (/Users/lucca/Documents/repos/idkshite.com/.next/server/chunks/521.js:78:4)
+    at __webpack_require__ (/Users/lucca/Documents/repos/idkshite.com/.next/server/webpack-runtime.js:25:42)
+    at 7519 (/Users/lucca/Documents/repos/idkshite.com/.next/server/pages/posts/[post].js:27:13)
+    at __webpack_require__ (/Users/lucca/Documents/repos/idkshite.com/.next/server/webpack-runtime.js:25:42)
+    at __webpack_exec__ (/Users/lucca/Documents/repos/idkshite.com/.next/server/pages/posts/[post].js:741:39)
+    at /Users/lucca/Documents/repos/idkshite.com/.next/server/pages/posts/[post].js:742:82
+    at __webpack_require__.X (/Users/lucca/Documents/repos/idkshite.com/.next/server/webpack-runtime.js:182:21) {
+  type: 'Error'
+}
+```
+
+<mark> In the following examples I will reframe from repeating the example output as it's always the same.</mark>
+
+
+##  Log `stderr` to a file
+```bash
+  npm run build 2> temporaryErrorDumpFile.txt
+```
+Another option is to redirect the `stderr` to a file with `2>`. This way the console will only contain informational logs.
+
+##  Log `stderr` and `stdout` to separate files
+```bash
+  npm run build > temporaryDumpFile.txt 2> temporaryErrorDumpFile.txt
+```
+With this command the console should stay empty, and you can analyze the errors and logs in separate files (here `temporaryErrorDumpFile.txt` and `temporaryDumpFile.txt`).
+
+##  Log `stderr` and `stdout` to the same file
+```bash
+  npm run build > temporaryCombinedDumpFile.txt 2>&1
+```
+This way you'll combine the errors and logs in the same file, and receive the entire output from the console in one file.
+The odd addition `2>&1` will tell the shell that you'd like to redirect `stderr` to the same target as `stdout`.
+
+
+
+
