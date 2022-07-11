@@ -1,7 +1,7 @@
 ---
 slug: command-output-file
 title: Dump command output into a file
-subtitle: Write your command output to a file using stderr and stdin
+subtitle: Write your command output to a file using stderr and stdout
 date: 2022-07-11
 author: lucca
 tags:
@@ -13,24 +13,24 @@ tags:
 Sometimes I need a bit more control over the output of commands. Maybe I want to analyze the error messages from a build process.
 This is when `stdin`, `stdout` and `stderr` come in handy.
 * `stdin` is the input of the command.
-* `stdout` is the output of the command.
+* `stdout` is the log output of the command.
 * `stderr` contains errors (and maybe warnings).
 
-Technically the author of a command line tool can also return errors from `stdout` and normal output from `stderr` but conventionally the output is handled like above.
+*Technically the author of a command line tool can also return errors from `stdout` and any normal output from `stderr` but conventionally the output is handled like above.*
 
 <ImgWithText url="https://imgur.com/jrI66xq" alt="stdin, stdout and stderr" className={"md:w-1/2 md:mx-auto"}>
     Input and output of a command can be controlled with stdin, stdout and stderr.
 </ImgWithText>
 
 In my example I would like to write the output of a next.js build process (`npm run build`) to a file.
-I have multiple options to do so depending on what part of the output I'd like to focus on.
+I have multiple options to do so, depending on what part of the output I'd like to focus on.
 
 ##  Log `stdout` to a file
 
 ```bash
   npm run build > temporaryDumpFile.txt
 ```
-`>` (shorthand for `1>`) will redirect the `stdout` of the build command to the `temporaryDumpFile.txt` file
+`>` (shorthand for `1>`) will redirect the `stdout` of the build command to the `temporaryDumpFile.txt`.
 This way the console only contains errors and warnings and the temporaryDumpFile.txt has all the informational logs.
 
 #### `temporaryDumpFile.txt`
@@ -69,7 +69,7 @@ Error: slug field not match with the path of its content source
 }
 ```
 
-<mark> In the following examples I will reframe from repeating the example output as it's always the same.</mark>
+<mark> In the following examples I will refrain from repeating the example output for the terminal and dumpfile as it's always the same.</mark>
 
 
 ##  Log `stderr` to a file
@@ -90,6 +90,9 @@ With this command the console should stay empty, and you can analyze the errors 
 ```
 This way you'll combine the errors and logs in the same file, and receive the entire output from the console in one file.
 The odd addition `2>&1` will tell the shell that you'd like to redirect `stderr` to the same target as `stdout`.
+
+You can also filter or process the output of a command before writing it to a file and build powerful pipelines.
+But this will be the topic of another post in the future. 📆
 
 
 
