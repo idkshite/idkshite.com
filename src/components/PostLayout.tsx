@@ -103,7 +103,7 @@ export default function PostLayout({
           }
           .metadata {
             display: flex;
-            align-content: space-between;
+            justify-content: space-between;
           }
           article {
             flex: 1 0 auto;
@@ -122,13 +122,13 @@ export default function PostLayout({
           }
           .tag-list {
             list-style: none;
-            text-align: right;
-            margin: 0 auto 0 0;
+            margin: 0 0.5rem 0 0;
             padding: 0;
           }
           .tag-list li {
             display: inline-block;
-            margin-left: 0.5rem;
+            margin-right: 0.5rem;
+            margin-bottom: 0.5rem;
           }
           .social-list {
             margin-top: 3rem;
