@@ -13,6 +13,7 @@ import { VERTICAL_MARGIN } from "../../public/styles/font";
 import { ViewerLocations } from "../components/ViewerLocations";
 import { Client } from "@notionhq/client";
 import { QueryDatabaseResponse } from "@notionhq/client/build/src/api-endpoints";
+import Image from "next/image";
 
 export default function Index({ posts, tags, pagination, flags }) {
   return (
@@ -26,13 +27,21 @@ export default function Index({ posts, tags, pagination, flags }) {
             <div className={"logo"}>
               <Logo></Logo>
             </div>
-            <h1 className="title2 title">“I don’t know shite about...”</h1>
             <p>
               I often realize I don't know shite about certain concepts,
               technologies and processes that I should understand. I have a
               superficial understanding but not enough in depth knowledge to be
               productive.
             </p>
+            <div className="mb-2 drop-shadow-">
+              <Image
+                className="rounded-md"
+                src={"/einstein-quote.png"}
+                width={1650}
+                height={600}
+                alt={"Einstein quote"}
+              />
+            </div>
             <p>
               This blog aims to educate myself to close knowledge gaps and "know
               my shite".
