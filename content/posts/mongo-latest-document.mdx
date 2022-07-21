@@ -1,0 +1,22 @@
+---
+slug: mongo-latest-document
+title: The freshest mongoDB document
+subtitle: How to get the latest added mongoDB document from a collection
+date: 2022-07-21
+author: lucca
+tags:
+  - programming
+  - learn-in-public
+---
+
+Recently I needed to create a lot of test documents one after another and inspect them after creation.
+There this mongoDB query turned out to be quite useful.
+Every time you execute it, it shows you the latest document inside your collection (here `purchases`);
+
+```mongodb
+db.getCollection('purchases').find().sort({createdAt:-1}).limit(1)
+```
+
+1. `find()` yields all documents from the collection.
+2. `sort({createdAt:-1})` sorts the results in descending order (largest to smallest) based on their creation date.
+3. `limit(1)` only shows one results from all results
