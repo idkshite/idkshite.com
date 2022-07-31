@@ -1,0 +1,109 @@
+---
+slug: share-utils-godot
+title: Share unorganisable GDScript code between files in Godot
+subtitle: How to import your util functions in your godot project
+date: 2022-07-31
+author: lucca
+tags:
+  - gdscript
+  - godot
+  - learn-in-public
+---
+
+If you want to organise your Code, you sometimes need to split out code into separate files.
+Working with an object-oriented approach, you probably already have plenty of classes taking care of their own concerns. But what if you have logic that doesn’t fit in any of these classes (utils, global constants or types), and you need to make it available in several places of your project? Repeating code is probably not an option as it quickly leads to hard-to-maintain code.
+That's why I summarised all the DRY methods to share Utils methods in GDScript.
+
+# The `class_name` keyword
+
+With the `class_name` keywords you create a new class which can be reference by this name throughout your whole codebase.
+
+## Static
+
+If you don’t plan to change the values in this class per instance, you can define all values as `const` and functions in there as `static func` . This way you don’t have to instantiate this class with `.new()`
+
+```python
+# res://Shared/ClingyConstants.gd
+
+class_name ClingyConstants
+
+const game_speed := 2000;
+const effect_speed := 100;
+const particle_speed := 20;
+
+static func get_constants_sum():
+	# note that you can't use variables (defined with var) inside a static function
+	return game_speed + effect_speed + particle_speed;
+```
+
+```python
+# res://Main.
+
+func _ready():
+	print("game_speed ", ClingyConstants.game_speed);
+	print("sum of constants ", ClingyConstants.get_constants_sum());
+```
+
+## Instantiated
+
+In case you need to create multiple instances of this class throughout your project, you can use `var` and `const` to define it’s member variables and use `func` for your methods (so they can access your `var`s and not only `const`s.
+
+```python
+# res://Shared/ImplodingInstance.gd
+
+class_name ImplodingInstance
+
+const explosion_radius := 30;
+var is_nice_explosion := true;
+
+func calculate_spread_radius():
+	if(is_nice_explosion):
+		return explosion_radius * 100;
+	return explosion_radius * 10;
+```
+
+```python
+# res://Main.gd
+
+func _ready():
+	print("explosion_radius ", ImplodingInstance.new().explosion_radius);
+	print("is_nice_explosion ", ImplodingInstance.new().is_nice_explosion);
+	print("calculate_spread_radius ", ImplodingInstance.new().calculate_spread_radius());
+```
+
+Find out more about the `class_name` keyword in the [Godot Docs](https://docs.godotengine.org/en/stable/tutorials/scripting/gdscript/gdscript_basics.html#registering-named-classes).
+
+# Loading classes with `preload`, as a resource
+
+Preloading allows you to “import” classes by deliberately calling `preload(...)` with the path to the class file as it’s first parameter. It can be useful if you’d like to rename your class depending on where you preload it. Or if you simply don’t want your class to be available from every script.
+
+```python
+# res://Shared/GlamorousGlobals.gd
+
+const screensize := Rect2(Vector2(0,0), Vector2(1920,1080));
+```
+
+```python
+# res://Main.gd
+
+var Globals = preload("res://Shared/GlamorousGlobals.gd");
+
+func _ready():
+	print("screensize ", Globals.screensize);
+```
+
+# Autoloading Scripts
+
+If your script inherits from `Node` it can be added as an Autoload Script through the `Project`  → `Project Settings`  → `AutoLoad` [Tab] → Add your file and Enable it
+
+<Imgur url="https://imgur.com/E3VNi8k"/>
+
+This script is then globally available through it’s name that you provided while registering the Autoload Script. (here `FunkyFunctions`).
+
+*I had to restart the Godot Engine before my Autoload script was recognised correctly in other scripts.*
+
+Compared to other methods this method creates a Node on the root viewport and attaches the script to it. You can observe this if you start your game and look at the “Remote” tab of your Scene tree.
+
+<Imgur url="https://imgur.com/9NPPsHV"/>
+
+Read more about AutoLoad in the [Godot docs](https://docs.godotengine.org/en/stable/tutorials/scripting/singletons_autoload.html).

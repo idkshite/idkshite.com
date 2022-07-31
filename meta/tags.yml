@@ -17,6 +17,8 @@ tags:
     name: CSS
   - slug: godot
     name: Godot Engine
+  - slug: gdscript
+    name: GDScript
   - slug: math
     name: Math
   - slug: gamedev
