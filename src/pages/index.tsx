@@ -22,8 +22,8 @@ export default function Index({ posts, tags, pagination, flags }) {
         <BasicMeta url={"/"} />
         <OpenGraphMeta url={"/"} />
         <TwitterCardMeta url={"/"} />
-        <div className="container">
-          <div className={"content min-h-screen"}>
+        <div className="container !items-start">
+          <div className={"content pb-6"}>
             <div className={"logo"}>
               <Logo></Logo>
             </div>
@@ -94,17 +94,20 @@ export async function getStaticProps() {
 }
 
 async function getCountryFlagsWhoVisited() {
-  const results = await getAllResultsFromAnalyticsDB();
+  // Disabled because the AnalyticsDB is no longer updated
+  // const results = await getAllResultsFromAnalyticsDB();
+  //
+  // const countries = results
+  //   .map((page) => {
+  //     if ("icon" in page && "emoji" in page.icon) return page?.icon?.emoji;
+  //     return false;
+  //   })
+  //   .filter((flag: string | boolean) => flag && flag !== "💩");
+  // const distinctFlags = Array.from(new Set(countries));
 
-  const countries = results
-    .map((page) => {
-      if ("icon" in page && "emoji" in page.icon) return page?.icon?.emoji;
-      return false;
-    })
-    .filter((flag: string | boolean) => flag && flag !== "💩");
-  const distinctFlags = Array.from(new Set(countries));
-
-  return distinctFlags;
+  return "🇦🇺 🇦🇹 🇧🇩 🇧🇷 🇧🇬 🇨🇦 🇨🇳 🇫🇮 🇫🇷 🇩🇪 🇮🇳 🇮🇩 🇯🇵 🇲🇬 🇳🇱 🇵🇱 🇵🇹 🇷🇺 🇸🇨 🇸🇬 🇸🇰 🇨🇭 🇹🇼 🇹🇭 🇹🇷 🇬🇧 🇺🇸".split(
+    " "
+  );
 }
 // TODO: this is broken and will not yield the whole db. its good enough for now but need fixing
 // TODO: Make this less imperative
