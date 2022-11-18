@@ -27,12 +27,6 @@ export default function Index({ posts, tags, pagination, flags }) {
             <div className={"logo"}>
               <Logo></Logo>
             </div>
-            <p>
-              I often realize I don't know shite about certain concepts,
-              technologies and processes that I should understand. I have a
-              superficial understanding but not enough in depth knowledge to be
-              productive.
-            </p>
             <div className="mb-2 drop-shadow-">
               <Image
                 className="rounded-md"
@@ -43,8 +37,18 @@ export default function Index({ posts, tags, pagination, flags }) {
               />
             </div>
             <p>
-              This blog aims to educate myself to close knowledge gaps and "know
-              my shite".
+              Sometimes I realise I haven't fully grasped certain concepts,
+              technologies and processes. Or simply put:
+              <br />
+              It feels like <strong>"I don't know shite"</strong> about them.
+              <br />
+            </p>
+            <p>
+              I found writing about my learnings, to be one of the most
+              effective methods to learn and retain knowledge.
+              <br />
+              This blog aims to educate myself to close knowledge gaps and{" "}
+              <strong>"know my shite"</strong>.
             </p>
             {flags.length >= 3 ? (
               <div className="flex w-full">
