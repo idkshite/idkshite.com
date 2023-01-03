@@ -12,18 +12,18 @@ tags:
 
 I wanted to create differently sized collision boxes for different sprite animations in Godot because they vastly differed from each other. For example The dimensions on my horizontal run animation is rectangular, but the Run_Up animation is rather square.
 
-<Video src="https://cleanshot-cloud-fra.accelerator.net/media/23887/69PrGPC1rtXcKACyVOOOP0vh0zc1CeeiXVedCoPr.mp4"/>
+<Video src="https://idkshite.s3.eu-central-1.amazonaws.com/videos/collision-shape-1-different-sizes.mp4"/>
 
 Because my project already contained one `CollisionShape2D` Node for my Run_X animation, I went ahead and duplicated this Node to save some time.
 
-<Video src="https://cleanshot-cloud-fra.accelerator.net/media/23887/jnRsjK2hLK6tCgRQKTxidvkfBvbQFB9KFvn3jt6h.mp4"/>
+<Video src="https://idkshite.s3.eu-central-1.amazonaws.com/videos/collision-shape-2-duplicate.mp4"/>
 
 ## The Problem
 
 But boy was I wrong. This did everything except saving time 🤡. When I tried to **adjust the `CollisionShape2D`'s rectangle shape** to the desired dimensions the Shapes suddenly started to **resize in unison**.
 As if they are somehow connected. And as I found out, they are in fact connected.
 
-<Video src="https://cleanshot-cloud-fra.accelerator.net/media/23887/n4HAlXlUhx7xuNMEbvHxYJu1dSTCYQaFeGE15weF.mp4"/>
+<Video src="https://idkshite.s3.eu-central-1.amazonaws.com/videos/collision-shape-3-connected-visual.mp4"/>
 
 When creating a `CollisionShape2D`, Godot tells you to assign a Shape to your Node because without this visual representation it's completely useless.
 
@@ -33,18 +33,18 @@ But all the duplicated `CollisionShape2D` that I created where pointing to the s
 Thanks to Godot's human-readable Scenen file (here `Squirrel.tscn`) I could actually see what was happening behind the scenes.
 All `CollisionShape2D` had `SubResource( 4 )` assigned as their `shape` property. And in the same file I could see that `SubResource( 4 )` is one `RectangleShape2D`.
 
-<Video src="https://cleanshot-cloud-fra.accelerator.net/media/23887/0CuStpaOXbrG9INroLkvGBkipnTOmTaR0bKwI53Y.mp4"/>
+<Video src="https://idkshite.s3.eu-central-1.amazonaws.com/videos/collision-shape-4-connected-code.mp4"/>
 
 ## Solution
 
 After knowing the issue, the solution is quite straightforward. I simply needed to apply a new `RectangleShape2D` for the shape of each `CollisionShape2D` Node.
 Then I could adjust the shape's dimensions based on the animation sprites dimension.
 
-<Video src="https://cleanshot-cloud-fra.accelerator.net/media/23887/fDwiX8n2nR9HtRtvkZ8HKJIYOjtElB112azNizku.mp4"/>
+<Video src="https://idkshite.s3.eu-central-1.amazonaws.com/videos/collision-shape-5-fix.mp4"/>
 
 After doing that, it's also clearly visible in the Scene file (here `Squirrel.tscn`) that each `CollisionShape2D` has it's own `RectangleShape2D` subresource.
 
-<Video src="https://cleanshot-cloud-fra.accelerator.net/media/23887/XD2nIJqCcztKvEFNLtwvmPf4AemcUdVuh9feoyLc.mp4"/>
+<Video src="https://idkshite.s3.eu-central-1.amazonaws.com/videos/collision-shape-6-different-collision-shapes.mp4"/>
 
 I hope this helps someone out there who encounters the same problem 🥳
 
