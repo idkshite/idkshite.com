@@ -1,0 +1,80 @@
+---
+slug: github-fork-npm
+title: Fork an npm package
+subtitle: For a github repo and use it as a dependency
+date: 2023-02-05
+author: lucca
+tags:
+  - javascript
+  - programming
+  - learn-in-public
+---
+
+I've been working on a prototype for a timboxing app and wanted to use a library called [react-timer-hook](https://github.com/amrlabib/react-timer-hook).
+The library was missing the feature to display time only in minutes instead of hours and minutes, so I [forked the repo](https://github.com/DATADEER/react-timer-hook) and added the feature.
+
+I didn't want to create a new npm package because I don't expect that anyone else would benefit from this code change. Therefore I created a fork of the [react-timer-hook](https://github.com/amrlabib/react-timer-hook) code on github.
+NPM allows you to **install** a package from a **github repo** with:
+```bash
+npm install <repo-url>
+```
+<em>In this case:</em>
+
+```bash
+npm install https://github.com/DATADEER/react-timer-hook
+```
+
+But I soon realised that this is not enough. As you can see in the `node_modules` folder of my app, the package is installed, but there is no sign of any code that i could import and use in my app.
+Like most packages the package needs to be **built** before it can be used.
+
+<ImgWithText url="https://imgur.com/Rhvfsrf" alt="dist folder is missing in folder structure" className={"md:w-1/2 md:mx-auto"}>
+    the actual code of the library is missing because it requires a build step
+</ImgWithText>
+
+There are at least 2 ways to solve this problem:
+
+(1.) Build the package and **check** the dist folder **in**to the git repo 😳 _This creates a lot of noise in your git commits and makes it harder to keep track of changes._
+
+(2.) **Build** the package when **installing** it as a **dependency** 🤠
+_This is the solution I chose. I added a `prepare` script to the `package.json` of my forked repo._
+
+```json
+{
+  "name": "react-timer-hook",
+  "version": "3.0.5",
+  [...]
+  "scripts": {
+    "build:demo": "rm -rf ./docs && webpack --config webpack.dev.js && webpack-dev-server --open --config webpack.dev.js",
+    "build:prod": "rm -rf ./dist && webpack --config webpack.prod.js",
+    "prepare": "npm run build:prod",
+    "lint": "node_modules/.bin/eslint src"
+  },
+```
+The `prepare` script is a built-in feature of npm, and it's executed when the package is installed as a dependency. It also runs if the package is installed from a git repo.
+I chose to run the existing `build:prod` script. It runs the build command of the dependency and creates the `dist` folder.
+
+
+<ImgWithText url="https://imgur.com/vrwHtAN" alt="dist folder was created now" className={"md:w-1/2 md:mx-auto"}>
+    now the dist folder is created
+</ImgWithText>
+
+Now I can import the package and use it in my app as if it was a regular npm package.
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
