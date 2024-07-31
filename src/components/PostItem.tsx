@@ -8,7 +8,7 @@ type Props = {
 };
 export default function PostItem({ post }: Props) {
   return (
-    <Link href={"/posts/" + post.slug}>
+    <Link legacyBehavior href={"/posts/" + post.slug}>
       <a>
         <h2 className="text-xl font-semibold  text-default-title">
           {post.title}

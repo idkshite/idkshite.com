@@ -7,7 +7,11 @@ type Props = {
 export default function TagButton({ tag }: Props) {
   return (
     <>
-      <Link href={"/posts/tags/[[...slug]]"} as={`/posts/tags/${tag.slug}`}>
+      <Link
+        legacyBehavior
+        href={"/posts/tags/[[...slug]]"}
+        as={`/posts/tags/${tag.slug}`}
+      >
         <a>#{tag.name}</a>
       </Link>
       <style jsx>{`
