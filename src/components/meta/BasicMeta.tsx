@@ -27,7 +27,7 @@ export default function BasicMeta({
       <meta
         name="keywords"
         content={
-          keywords
+          !!keywords?.length
             ? keywords.join(",")
             : config.site_keywords.map((it) => it.keyword).join(",")
         }
