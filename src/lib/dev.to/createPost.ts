@@ -1,6 +1,6 @@
 import axios from "axios";
 import { PostFrontMatter } from "../../pages/api/publish/[postSlug]";
-import configJSON from "/config.json";
+import configJSON from "./../../../config.json";
 
 export async function createDevToPost({
   slug,

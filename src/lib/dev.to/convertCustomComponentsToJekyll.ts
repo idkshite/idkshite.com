@@ -1,12 +1,9 @@
-import { CustomMDXComponentName } from "../../pages/posts/[post]";
-import fs from "node:fs/promises";
-import { fromMarkdown } from "mdast-util-from-markdown";
-import { toMarkdown } from "mdast-util-to-markdown";
-import { mdxFromMarkdown, mdxToMarkdown } from "mdast-util-mdx";
-import { Content, Root } from "mdast-util-from-markdown/lib";
-import { mdxjs } from "micromark-extension-mdxjs";
+import {fromMarkdown} from "mdast-util-from-markdown";
+import {mdxFromMarkdown} from "mdast-util-mdx";
+import {Content} from "mdast-util-from-markdown/lib";
+import {mdxjs} from "micromark-extension-mdxjs";
 import flattendeep from "lodash.flattendeep";
-import { PostFrontMatter } from "../../pages/api/publish/[postSlug]";
+import {PostFrontMatter} from "../../pages/api/publish/[postSlug]";
 
 type CustomMDXTag = {
   expression: string;
