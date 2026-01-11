@@ -2,16 +2,6 @@ import { createDevToPost } from "../../../lib/dev.to/createPost";
 import fs from "fs";
 import matter from "gray-matter";
 import yaml from "js-yaml";
-import { serialize } from "next-mdx-remote/serialize";
-import { MDXRemote } from "next-mdx-remote";
-import YouTube from "react-youtube";
-import { TwitterTweetEmbed } from "react-twitter-embed";
-import { CodeSandbox } from "../../../components/rich-content/CodeSandbox";
-import { Replit } from "../../../components/rich-content/Replit";
-import { Video } from "../../../components/rich-content/Video";
-import { Link } from "../../../components/rich-content/Link";
-import { Imgur } from "../../../components/rich-content/Image";
-import { ImgWithText } from "../../../components/rich-content/ImageWithText";
 import { convertCustomComponentsToJekyll } from "../../../lib/dev.to/convertCustomComponentsToJekyll";
 import { slugToPostContent } from "../../../lib/posts";
 
@@ -44,9 +34,8 @@ export default async function handler(req, res) {
       frontMatter
     );
 
-    let result;
     try {
-      result = await createDevToPost({
+      await createDevToPost({
         slug,
         markdown: cleanedContent,
         frontMatter,

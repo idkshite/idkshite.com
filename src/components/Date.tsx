@@ -7,7 +7,7 @@ type Props = {
 export default function Date({ date, className }: Props) {
   return (
     <time className={className} dateTime={formatISO(date)}>
-      <span>Published in: {format(date, "yyyy")}</span>
+      <span>Published in: {format(date, "MMMM yyyy")}</span>
       <style jsx>
         {`
           span {

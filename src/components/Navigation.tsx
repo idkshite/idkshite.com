@@ -19,12 +19,12 @@ export default function Navigation() {
       <div className={"container " + (active ? "active" : "")}>
         <ul>
           <li>
-            <Link href="/">
+            <Link href="/" legacyBehavior>
               <a className={router.pathname === "/" ? "active" : null}>about</a>
             </Link>
           </li>
           <li>
-            <Link href="/posts">
+            <Link href="/posts" legacyBehavior>
               <a
                 className={
                   router.pathname.startsWith("/posts") ? "active" : null

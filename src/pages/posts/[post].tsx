@@ -1,23 +1,20 @@
-import { GetStaticProps, GetStaticPaths } from "next";
-import { MDXRemote } from "next-mdx-remote";
-import matter from "gray-matter";
-import { fetchPostContent, slugToPostContent } from "../../lib/posts";
+import {GetStaticPaths, GetStaticProps} from "next";
+import {MDXRemote} from "next-mdx-remote";
+import {fetchPostContent, slugToPostContent} from "../../lib/posts";
 import fs from "fs";
-import yaml from "js-yaml";
-import { parseISO } from "date-fns";
+import {parseISO} from "date-fns";
 import PostLayout from "../../components/PostLayout";
 
 import YouTube from "../../components/rich-content/YouTubeWrapper";
-import { TwitterTweetEmbed } from "react-twitter-embed";
-import { CodeSandbox } from "../../components/rich-content/CodeSandbox";
-import { Replit } from "../../components/rich-content/Replit";
-import { Imgur } from "../../components/rich-content/Image";
-import { ImgWithText } from "../../components/rich-content/ImageWithText";
-import { serialize } from "next-mdx-remote/serialize";
-import { Video } from "../../components/rich-content/Video";
-import { Link } from "../../components/rich-content/Link";
-import { ReactNode } from "react";
-import { MathDisclaimer } from "../../components/MathDisclaimer";
+import {TwitterTweetEmbed} from "react-twitter-embed";
+import {CodeSandbox} from "../../components/rich-content/CodeSandbox";
+import {Replit} from "../../components/rich-content/Replit";
+import {Imgur} from "../../components/rich-content/Image";
+import {ImgWithText} from "../../components/rich-content/ImageWithText";
+import {serialize} from "next-mdx-remote/serialize";
+import {Video} from "../../components/rich-content/Video";
+import {Link} from "../../components/rich-content/Link";
+import {MathDisclaimer} from "../../components/MathDisclaimer";
 
 export type Props = {
   title: string;
@@ -30,7 +27,7 @@ export type Props = {
   source: any;
 };
 
-const components: { [key in CustomMDXComponentName]: ReactNode } = {
+const components = {
   YouTube,
   TwitterTweetEmbed,
   CodeSandbox,
@@ -79,7 +76,9 @@ export default function Post({
 }
 
 export const getStaticPaths: GetStaticPaths = async () => {
-  const paths = fetchPostContent().map((it) => "/posts/" + it.slug);
+  const paths = fetchPostContent().map((post) => {
+    return "/posts/" + post.slug
+  });
   return {
     paths,
     fallback: false,
@@ -89,26 +88,28 @@ export const getStaticPaths: GetStaticPaths = async () => {
 export const getStaticProps: GetStaticProps = async ({ params }) => {
   const slug = params.post as string;
   const source = fs.readFileSync(slugToPostContent[slug].fullPath, "utf8");
-  const { content, data } = matter(source, {
-    engines: {
-      yaml: (s) => yaml.load(s, { schema: yaml.JSON_SCHEMA }) as object,
-    },
-  });
-  const mdxSource = await serialize(content, {
-    scope: data,
+
+  // Using next-mdx-remote v5 API
+  const mdxSource = await serialize(source, {
+    parseFrontmatter: true,
     mdxOptions: {
-      remarkPlugins: [require("remark-prism"), {}],
-    },
+      format: 'mdx',
+      remarkPlugins: [require("remark-prism")],
+      development: process.env.NODE_ENV === 'development',
+    }
   });
+
+  const frontmatter = mdxSource?.frontmatter;
+  
   return {
     props: {
-      title: data.title,
-      subtitle: data.subtitle ?? "",
-      dateString: data.date,
-      slug: data.slug,
+      title: frontmatter.title,
+      subtitle: frontmatter.subtitle ?? "",
+      dateString: frontmatter.date,
+      slug: frontmatter.slug,
       description: "",
-      tags: data.tags,
-      author: data.author,
+      tags: frontmatter.tags,
+      author: frontmatter.author,
       source: mdxSource,
     },
   };

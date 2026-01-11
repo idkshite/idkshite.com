@@ -1,7 +1,16 @@
-const withImages = require("next-images");
-
-const config = {
-  fileExtensions: ["jpg", "jpeg", "png", "gif", "ico", "webp", "jp2", "avif"],
+/** @type {import('next').NextConfig} */
+const nextConfig = {
+  images: {
+    domains: [],
+    // Optional: configure remotePatterns if you need to load images from external domains
+    // remotePatterns: [
+    //   {
+    //     protocol: 'https',
+    //     hostname: 'example.com',
+    //     pathname: '/images/**',
+    //   },
+    // ],
+  },
   pageExtensions: ["tsx","ts"],
   webpack: (config, { buildId, dev, isServer, defaultLoaders, webpack }) => {
     config.module.rules.push(
@@ -21,4 +30,4 @@ const config = {
   },
 };
 
-module.exports = withImages(config);
+module.exports = nextConfig;
