@@ -27,7 +27,7 @@ export function ImgWithText({
           style={{ ...style }}
           isWrappedInRichContentClass={true}
         />
-        <p className="!text-sm">{children}</p>
+        <span className="[&>p]:text-sm">{children}</span>
       </div>
     </>
   );

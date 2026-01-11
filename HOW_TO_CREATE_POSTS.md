@@ -16,7 +16,5 @@ tags:
 3. Use text and existing mdx components to build your post 
 4. Push to publish
 
-## Caveats
-* tailwind currently doesn't recognize the tailwind classes used in .mdx files. So you need to safelist these classes in tailwind.config.js  
+## Caveats 
 * some characters like `<` need to be escaped when used in a post. use {`<`} instead.
-* 
