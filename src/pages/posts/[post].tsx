@@ -6,7 +6,6 @@ import {parseISO} from "date-fns";
 import PostLayout from "../../components/PostLayout";
 
 import YouTube from "../../components/rich-content/YouTubeWrapper";
-import {TwitterTweetEmbed} from "react-twitter-embed";
 import {CodeSandbox} from "../../components/rich-content/CodeSandbox";
 import {Replit} from "../../components/rich-content/Replit";
 import {Imgur} from "../../components/rich-content/Image";
@@ -29,7 +28,6 @@ export type Props = {
 
 const components = {
   YouTube,
-  TwitterTweetEmbed,
   CodeSandbox,
   Replit,
   Video,
@@ -41,7 +39,6 @@ const components = {
 
 export type CustomMDXComponentName =
   | "YouTube"
-  | "TwitterTweetEmbed"
   | "CodeSandbox"
   | "Replit"
   | "Video"

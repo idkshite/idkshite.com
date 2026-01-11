@@ -4,8 +4,8 @@ import { AppProps } from "next/app";
 // NOTE: Do not move the styles dir to the src.
 // They are used by the Netlify CMS preview feature.
 import "../../public/styles/global.css";
-import "/public/styles/prism-themes/syntax.css";
-import "/public/styles/fonts/dank-mono/dmvendor.css";
+import "../../public/styles/prism-themes/syntax.css";
+import "../../public/styles/fonts/dank-mono/dmvendor.css";
 import { FONT_STYLE } from "../../public/styles/font";
 
 export default function App({ Component, pageProps }: AppProps) {
