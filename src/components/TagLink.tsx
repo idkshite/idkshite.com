@@ -8,10 +8,9 @@ type Props = {
 export default function Tag({ tag }: Props) {
   return (
     <>
-      <Link href={"/posts/tags/[[...slug]]"} as={`/posts/tags/${tag.slug}`} legacyBehavior>
-        <a>{"#" + tag.name}</a>
+      <Link href={"/posts/tags/[[...slug]]"} as={`/posts/tags/${tag.slug}`}>
+        {"#" + tag.name}
       </Link>
-
       <style jsx>{`
         li {
           list-style: none;
