@@ -50,6 +50,7 @@ export default function Index({ posts, tags, pagination, flags }) {
               This blog aims to educate myself to close knowledge gaps and{" "}
               <strong>"know my shite"</strong>.
             </p>
+            <p>idkshite.com is a reminder that we all start at "not knowing" and eventually get to "knowing a little more". And that's ok. </p>
             {flags.length >= 3 ? (
               <div className="flex w-full">
                 <ViewerLocations flags={flags} />
