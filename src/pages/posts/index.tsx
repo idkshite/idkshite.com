@@ -31,11 +31,11 @@ export default function Index({ posts, tags, pagination }: Props) {
 }
 
 export const getStaticProps: GetStaticProps = async () => {
-  const posts = listPostContent(1, config.posts_per_page);
+  const posts = await listPostContent(1, config.posts_per_page);
   const tags = listTags();
   const pagination = {
     current: 1,
-    pages: Math.ceil(countPosts() / config.posts_per_page),
+    pages: Math.ceil((await countPosts()) / config.posts_per_page),
   };
   return {
     props: {
@@ -43,5 +43,7 @@ export const getStaticProps: GetStaticProps = async () => {
       tags,
       pagination,
     },
+    // Time-based backstop so newly published Sanity posts surface in the list.
+    revalidate: 60,
   };
 };

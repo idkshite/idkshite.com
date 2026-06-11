@@ -3,7 +3,7 @@ import fs from "fs";
 import matter from "gray-matter";
 import yaml from "js-yaml";
 import { convertCustomComponentsToJekyll } from "../../../lib/dev.to/convertCustomComponentsToJekyll";
-import { slugToPostContent } from "../../../lib/posts";
+import { getPostBySlug } from "../../../lib/posts";
 
 export type PostFrontMatter = {
   slug: string; // 'asana-node-cli',
@@ -21,7 +21,11 @@ export default async function handler(req, res) {
     const slug = req?.query?.postSlug;
     if (!slug || !slug.trim())
       return res.status(400).send("missing post slug query parameter");
-    const source = fs.readFileSync(slugToPostContent[slug].fullPath, "utf8");
+    // dev.to cross-publishing is MDX-only (it reads the raw markdown file).
+    const post = await getPostBySlug(slug);
+    if (!post || post.source !== "mdx")
+      return res.status(404).send(`no MDX post found for slug: ${slug}`);
+    const source = fs.readFileSync(post.fullPath, "utf8");
     const { content, data } = matter(source, {
       engines: {
         yaml: (s) => yaml.load(s, { schema: yaml.JSON_SCHEMA }) as object,

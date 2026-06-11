@@ -33,11 +33,16 @@ export default function Page({ posts, tags, pagination, page }: Props) {
 
 export const getStaticProps: GetStaticProps = async ({ params }) => {
   const page = parseInt(params.page as string);
-  const posts = listPostContent(page, config.posts_per_page);
+  const pages = Math.ceil((await countPosts()) / config.posts_per_page);
+  // fallback: "blocking" can hit any page number; only 2..pages exist.
+  if (page < 2 || page > pages) {
+    return { notFound: true };
+  }
+  const posts = await listPostContent(page, config.posts_per_page);
   const tags = listTags();
   const pagination = {
     current: page,
-    pages: Math.ceil(countPosts() / config.posts_per_page),
+    pages,
   };
   return {
     props: {
@@ -46,16 +51,19 @@ export const getStaticProps: GetStaticProps = async ({ params }) => {
       tags,
       pagination,
     },
+    // Time-based backstop so newly published Sanity posts surface in the list.
+    revalidate: 60,
   };
 };
 
 export const getStaticPaths: GetStaticPaths = async () => {
-  const pages = Math.ceil(countPosts() / config.posts_per_page);
+  const pages = Math.ceil((await countPosts()) / config.posts_per_page);
   const paths = Array.from(Array(pages - 1).keys()).map((it) => ({
     params: { page: (it + 2).toString() },
   }));
   return {
     paths: paths,
-    fallback: false,
+    // New Sanity posts can add a pagination page; render it on first request.
+    fallback: "blocking",
   };
 };

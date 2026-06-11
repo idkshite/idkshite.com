@@ -34,15 +34,19 @@ export default function Index({ posts, tag, pagination, page }: Props) {
 export const getStaticProps: GetStaticProps = async ({ params }) => {
   const queries = params.slug as string[];
   const [slug, page] = [queries[0], queries[1]];
-  const posts = listPostContent(
+  const tag = getTag(slug);
+  // fallback: "blocking" can hit arbitrary slugs; only known tags exist.
+  if (!tag) {
+    return { notFound: true };
+  }
+  const posts = await listPostContent(
     page ? parseInt(page as string) : 1,
     config.posts_per_page,
     slug
   );
-  const tag = getTag(slug);
   const pagination = {
     current: page ? parseInt(page as string) : 1,
-    pages: Math.ceil(countPosts(slug) / config.posts_per_page),
+    pages: Math.ceil((await countPosts(slug)) / config.posts_per_page),
   };
   const props: {
     posts: PostContent[];
@@ -55,24 +59,30 @@ export const getStaticProps: GetStaticProps = async ({ params }) => {
   }
   return {
     props,
+    // Time-based backstop so newly published Sanity posts surface on tag pages.
+    revalidate: 60,
   };
 };
 
 export const getStaticPaths: GetStaticPaths = async () => {
-  const paths = listTags().flatMap((tag) => {
-    const pages = Math.ceil(countPosts(tag.slug) / config.posts_per_page);
-    return Array.from(Array(pages).keys()).map((page) =>
-      page === 0
-        ? {
-            params: { slug: [tag.slug] },
-          }
-        : {
-            params: { slug: [tag.slug, (page + 1).toString()] },
-          }
-    );
-  });
+  const tagPaths = await Promise.all(
+    listTags().map(async (tag) => {
+      const pages = Math.ceil((await countPosts(tag.slug)) / config.posts_per_page);
+      return Array.from(Array(pages).keys()).map((page) =>
+        page === 0
+          ? {
+              params: { slug: [tag.slug] },
+            }
+          : {
+              params: { slug: [tag.slug, (page + 1).toString()] },
+            }
+      );
+    })
+  );
   return {
-    paths: paths,
-    fallback: false,
+    // New Sanity posts can push a tag past a page boundary; render the new
+    // pagination page on first request instead of 404ing until a rebuild.
+    paths: tagPaths.flat(),
+    fallback: "blocking",
   };
 };

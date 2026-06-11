@@ -1,15 +1,14 @@
 /** @type {import('next').NextConfig} */
 const nextConfig = {
     images: {
-        domains: [],
-        // Optional: configure remotePatterns if you need to load images from external domains
-        // remotePatterns: [
-        //   {
-        //     protocol: 'https',
-        //     hostname: 'example.com',
-        //     pathname: '/images/**',
-        //   },
-        // ],
+        // Sanity asset CDN serves post images (auto WebP/AVIF, resized via urlFor).
+        remotePatterns: [
+            {
+                protocol: 'https',
+                hostname: 'cdn.sanity.io',
+                pathname: '/images/**',
+            },
+        ],
     },
     pageExtensions: ["tsx", "ts"],
     turbopack: {

@@ -1,7 +1,9 @@
 import {fromMarkdown} from "mdast-util-from-markdown";
 import {mdxFromMarkdown} from "mdast-util-mdx";
-import {Content} from "mdast-util-from-markdown/lib";
 import {mdxjs} from "micromark-extension-mdxjs";
+// `bundler` module resolution blocks this package's internal /lib subpath; the
+// mdast node type is only used loosely here, so alias it locally.
+type Content = any;
 import flattendeep from "lodash.flattendeep";
 import {PostFrontMatter} from "../../pages/api/publish/[postSlug]";
 
