@@ -1,4 +1,4 @@
-import { freshClient } from "../sanity/lib/client";
+import { freshClient, previewClient } from "../sanity/lib/client";
 import { postBySlugQuery, postListQuery } from "../sanity/lib/queries";
 
 // A Sanity post as it enters the unified merge seam — same shape as an MDX
@@ -9,7 +9,9 @@ export type SanityPostContent = {
   readonly slug: string;
   readonly title: string;
   readonly date: string;
-  readonly subtitle?: string;
+  // null, never undefined: this entry is serialized straight into getStaticProps
+  // and Next rejects undefined in props.
+  readonly subtitle?: string | null;
   readonly tags?: string[];
 };
 
@@ -26,7 +28,7 @@ export async function loadSanityPosts(): Promise<SanityPostContent[]> {
       slug: p.slug,
       title: p.title,
       date: p.date,
-      subtitle: p.subtitle ?? undefined,
+      subtitle: p.subtitle ?? null,
       tags: (p.tags ?? []).filter(Boolean),
     }));
   } catch (err: any) {
@@ -41,4 +43,11 @@ export async function loadSanityPosts(): Promise<SanityPostContent[]> {
 // Full post (expanded body) for rendering a single page.
 export async function fetchSanityPostBySlug(slug: string) {
   return freshClient.fetch(postBySlugQuery, { slug });
+}
+
+// Preview-only: same query, but through the drafts-perspective client so the
+// unpublished version (a brand-new draft, or pending edits to a live post) is
+// what renders. Bypasses the published merge seam entirely.
+export async function fetchDraftPostBySlug(slug: string) {
+  return previewClient.fetch(postBySlugQuery, { slug });
 }

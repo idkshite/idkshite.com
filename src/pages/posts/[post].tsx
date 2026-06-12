@@ -1,7 +1,8 @@
 import { GetStaticPaths, GetStaticProps } from "next";
+import { stegaClean } from "@sanity/client/stega";
 import { MDXRemote } from "next-mdx-remote";
-import { fetchPostContent, getPostBySlug } from "../../lib/posts";
-import { fetchSanityPostBySlug } from "../../lib/sanity-posts";
+import { fetchPostContent } from "../../lib/posts";
+import { resolvePost } from "../../lib/post-resolver";
 import { highlightBodyCode } from "../../lib/highlight";
 import fs from "fs";
 import { parseISO } from "date-fns";
@@ -26,6 +27,9 @@ type SharedProps = {
   tags: string[];
   author: string;
   description?: string;
+  // True only when rendered through Sanity Draft Mode; drives the Visual
+  // Editing overlay mount in _app.
+  draftMode: boolean;
 };
 
 // Discriminated on `source`: MDX carries a serialized payload, Sanity a
@@ -84,15 +88,18 @@ export const getStaticPaths: GetStaticPaths = async () => {
   };
 };
 
-export const getStaticProps: GetStaticProps = async ({ params }) => {
-  const slug = params.post as string;
-  const post = await getPostBySlug(slug);
-  if (!post) {
+export const getStaticProps: GetStaticProps = async (context) => {
+  const slug = context.params.post as string;
+  const draftMode = context.draftMode ?? false;
+
+  const decision = await resolvePost({ slug, draftMode });
+
+  if (decision.kind === "notFound") {
     return { notFound: true };
   }
 
-  if (post.source === "mdx") {
-    const file = fs.readFileSync(post.fullPath, "utf8");
+  if (decision.kind === "mdx") {
+    const file = fs.readFileSync(decision.post.fullPath, "utf8");
     // Using next-mdx-remote v5 API
     const mdxSource = await serialize(file, {
       parseFrontmatter: true,
@@ -115,28 +122,32 @@ export const getStaticProps: GetStaticProps = async ({ params }) => {
         tags: frontmatter.tags,
         author: frontmatter.author,
         mdxSource,
+        draftMode,
       },
     };
   }
 
-  const doc = await fetchSanityPostBySlug(slug);
-  if (!doc) {
-    return { notFound: true };
-  }
-
+  const doc = decision.doc;
   return {
     props: {
       source: "sanity",
+      // title/subtitle keep stega so click-to-edit overlays work on the rendered
+      // headings. The rest are value-logic — parseISO(date), the
+      // getTag()/getAuthor() slug lookups, the slug-based URLs — and would break
+      // on stega invisibles, so clean them. (No-op on published reads.)
       title: doc.title,
       subtitle: doc.subtitle ?? "",
-      dateString: doc.date,
-      slug: doc.slug,
+      dateString: stegaClean(doc.date),
+      slug: stegaClean(doc.slug),
       description: "",
-      tags: doc.tags ?? [],
-      author: doc.author,
+      tags: (doc.tags ?? []).map((t: string) => stegaClean(t)),
+      author: stegaClean(doc.author),
       body: highlightBodyCode(doc.body ?? []),
+      draftMode,
     },
-    // On-demand ISR backstop in case a publish webhook is missed.
-    revalidate: 60,
+    // On-demand ISR backstop for published pages. Draft pages are
+    // request-rendered (draft mode bypasses the static cache), so revalidate
+    // is irrelevant there.
+    ...(draftMode ? {} : { revalidate: 60 }),
   };
 };

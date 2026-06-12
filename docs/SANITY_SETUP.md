@@ -18,11 +18,18 @@ NEXT_PUBLIC_SANITY_PROJECT_ID=x6znc9mw
 NEXT_PUBLIC_SANITY_DATASET=production
 SANITY_API_READ_TOKEN=<viewer token, step 2>
 SANITY_REVALIDATE_SECRET=<any long random string you invent>
+
+# Draft preview (Presentation + Visual Editing) — see section 6.
+NEXT_PUBLIC_SANITY_STUDIO_URL=http://localhost:3000/studio
 ```
 
 `NEXT_PUBLIC_SANITY_PROJECT_ID` is **required** (no code default) — set it or
 the Sanity client has no project to talk to. Dataset/API version fall back to
 the values above if unset.
+
+`NEXT_PUBLIC_SANITY_STUDIO_URL` powers stega click-to-edit links in preview. Use
+`http://localhost:3000/studio` locally and `https://<your-production-domain>/studio`
+on Vercel.
 
 ## 2. Read token
 
@@ -65,6 +72,37 @@ typegen / MCP:
 ```bash
 npx sanity schema deploy
 ```
+
+## 6. Draft preview (Presentation + Visual Editing)
+
+Preview unpublished drafts — rendered with the real `PostLayout` and Portable
+Text — before publishing, with click-to-edit overlays. Preview-only: nothing
+about how published posts are built or served changes.
+
+**Reused, not new:** `SANITY_API_READ_TOKEN` (the Viewer token from step 2)
+doubles as the preview token. The CORS origins from step 3 already cover
+Presentation (the Studio is embedded, same origin).
+
+**Env vars:**
+
+- `NEXT_PUBLIC_SANITY_STUDIO_URL` — set per section 1 (the per-environment
+  `/studio` URL). Add it in Vercel for Production + Preview + Development.
+- `SANITY_STUDIO_PREVIEW_ORIGIN` — **optional**. Leave unset for the embedded
+  Studio (preview defaults to the same origin). Only set it if you ever run a
+  Studio on a different host than the site.
+
+**How to use it:**
+
+1. Open `/studio` → **Presentation** (new tab in the Studio).
+2. Pick a post (or open one from the Structure tool's "Open in Presentation").
+   A draft needs at least a **slug** to resolve to `/posts/<slug>` — give a new
+   draft a slug first.
+3. The site renders in the side iframe on the **draft**; edits refresh it live,
+   and clicking any element jumps to its field. Outside Presentation a draft URL
+   shows a "Disable Draft Mode" button to exit.
+
+Brand-new drafts (never published) and unpublished edits to live posts both
+preview. MDX posts are untouched by draft mode.
 
 ## Done — how publishing works now
 

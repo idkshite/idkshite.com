@@ -9,3 +9,8 @@ export const dataset =
 
 export const projectId =
   process.env.NEXT_PUBLIC_SANITY_PROJECT_ID;
+
+// Absolute URL of the embedded Studio (e.g. https://idkshite.com/studio). Drives
+// stega click-to-edit links in preview; public so the browser overlay can use it.
+export const studioUrl =
+  process.env.NEXT_PUBLIC_SANITY_STUDIO_URL;

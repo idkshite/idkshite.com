@@ -90,10 +90,13 @@ export default function Index({ posts, tags, pagination, flags }) {
   );
 }
 
-export async function getStaticProps() {
+export async function getStaticProps(context: { draftMode?: boolean }) {
   return {
     props: {
       flags: await getCountryFlagsWhoVisited(),
+      // Presentation's default landing is "/", so the overlay must connect here
+      // too — even though the home page itself isn't draft-aware.
+      draftMode: context.draftMode ?? false,
     },
   };
 }

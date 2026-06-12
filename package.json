@@ -17,6 +17,7 @@
     "@portabletext/react": "^6.2.0",
     "@sanity/code-input": "^7.1.2",
     "@sanity/image-url": "^2.1.1",
+    "@sanity/react-loader": "^2.0.13",
     "@sanity/vision": "^6.0.0",
     "@svgr/webpack": "^8.1.0",
     "@types/js-yaml": "^4.0.0",

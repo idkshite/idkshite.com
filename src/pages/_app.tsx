@@ -1,5 +1,7 @@
 import "normalize.css";
 import { AppProps } from "next/app";
+import { useRouter } from "next/router";
+import dynamic from "next/dynamic";
 
 // NOTE: Do not move the styles dir to the src.
 // They are used by the Netlify CMS preview feature.
@@ -8,10 +10,22 @@ import "../../public/styles/prism-themes/syntax.css";
 import "../../public/styles/fonts/dank-mono/dmvendor.css";
 import { FONT_STYLE } from "../../public/styles/font";
 
+// Visual Editing pulls in browser-only Sanity code; load it lazily so it never
+// touches the published bundle.
+const SanityVisualEditing = dynamic(
+  () => import("../components/SanityVisualEditing")
+);
+
 export default function App({ Component, pageProps }: AppProps) {
+  const router = useRouter();
+  // Overlays only in Draft Mode, and never over the embedded Studio SPA itself.
+  const showVisualEditing =
+    pageProps.draftMode && !router.pathname.startsWith("/studio");
+
   return (
     <>
       <Component {...pageProps} />
+      {showVisualEditing && <SanityVisualEditing />}
       <style jsx global>{`
         @import url("https://fonts.googleapis.com/css2?family=Jost:ital,wght@0,400;0,500;0,600;0,700;0,900;1,400&display=swap");
 

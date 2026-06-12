@@ -14,7 +14,8 @@ export type MdxPostContent = {
   readonly date: string;
   readonly title: string;
   readonly slug: string;
-  readonly subtitle?: string;
+  // null, never undefined — serialized directly into getStaticProps props.
+  readonly subtitle?: string | null;
   readonly tags?: string[];
   readonly fullPath: string;
 };
@@ -60,7 +61,7 @@ export function loadMdxPosts(): MdxPostContent[] {
         date: matterData.date,
         title: matterData.title,
         slug: matterData.slug,
-        subtitle: matterData.subtitle,
+        subtitle: matterData.subtitle ?? null,
         tags: matterData.tags,
         fullPath,
       };

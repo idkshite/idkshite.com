@@ -1,3 +1,4 @@
+import { stegaClean } from "@sanity/client/stega";
 import Prism from "prismjs";
 // Node-only loader; called from getStaticProps so grammars stay off the client bundle.
 import loadLanguages from "prismjs/components/index";
@@ -44,7 +45,12 @@ export function highlightBodyCode(body: any[]): any[] {
   if (!Array.isArray(body)) return body;
   return body.map((block) =>
     block && block._type === "code" && typeof block.code === "string"
-      ? { ...block, highlighted: highlightCode(block.code, block.language) }
+      ? {
+          ...block,
+          // Strip stega invisibles in preview — they'd corrupt the tokenised
+          // code markup (code overlays aren't worth a broken snippet).
+          highlighted: highlightCode(stegaClean(block.code), block.language),
+        }
       : block
   );
 }

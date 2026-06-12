@@ -30,7 +30,7 @@ export default function Index({ posts, tags, pagination }: Props) {
   );
 }
 
-export const getStaticProps: GetStaticProps = async () => {
+export const getStaticProps: GetStaticProps = async (context) => {
   const posts = await listPostContent(1, config.posts_per_page);
   const tags = listTags();
   const pagination = {
@@ -42,6 +42,9 @@ export const getStaticProps: GetStaticProps = async () => {
       posts,
       tags,
       pagination,
+      // Keep the Visual Editing overlay connected when navigating to the
+      // listing inside Presentation (listing stays published-only).
+      draftMode: context.draftMode ?? false,
     },
     // Time-based backstop so newly published Sanity posts surface in the list.
     revalidate: 60,
