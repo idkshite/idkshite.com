@@ -3,6 +3,7 @@ import type { SchemaTypeDefinition } from "sanity";
 import { post } from "./documents/post";
 import { author } from "./documents/author";
 import { tag } from "./documents/tag";
+import { siteSettings } from "./documents/siteSettings";
 import { youtube } from "./blocks/youtube";
 import { video } from "./blocks/video";
 import { codeSandbox } from "./blocks/codeSandbox";
@@ -15,6 +16,7 @@ export const schemaTypes: SchemaTypeDefinition[] = [
   post,
   author,
   tag,
+  siteSettings,
   // portable text blocks
   youtube,
   video,

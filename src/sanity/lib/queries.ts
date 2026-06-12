@@ -39,3 +39,8 @@ export const postBySlugQuery = defineQuery(`
 export const postSlugsQuery = defineQuery(`
   *[_type == "post" && defined(slug.current)].slug.current
 `);
+
+// Editable home page intro from the siteSettings singleton.
+export const siteSettingsQuery = defineQuery(`
+  *[_type == "siteSettings"][0]{ homeIntro }
+`);

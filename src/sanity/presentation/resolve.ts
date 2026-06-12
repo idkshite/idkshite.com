@@ -4,6 +4,11 @@ import { defineLocations, PresentationPluginOptions } from "sanity/presentation"
 // lands directly on /posts/<slug> (and offers the listing as a secondary spot).
 export const resolve: PresentationPluginOptions["resolve"] = {
   locations: {
+    // The intro singleton renders on the home page.
+    siteSettings: defineLocations({
+      select: {},
+      resolve: () => ({ locations: [{ title: "Home", href: "/" }] }),
+    }),
     post: defineLocations({
       select: { title: "title", slug: "slug.current" },
       resolve: (doc) => ({

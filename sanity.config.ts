@@ -6,6 +6,9 @@ import { codeInput } from "@sanity/code-input";
 import { schemaTypes } from "./src/sanity/schemaTypes";
 import { apiVersion, dataset, projectId } from "./src/sanity/env";
 import { resolve } from "./src/sanity/presentation/resolve";
+import { structure, SINGLETONS } from "./src/sanity/structure";
+
+const singletonIds = SINGLETONS.map((s) => s.id);
 
 // Preview origin: unset → same origin as the embedded Studio (the common case).
 // Set SANITY_STUDIO_PREVIEW_ORIGIN to point a deployed Studio at another host.
@@ -32,9 +35,26 @@ export default defineConfig({
         },
       },
     }),
-    structureTool(),
+    structureTool({ structure }),
     codeInput(),
     visionTool({ defaultApiVersion: apiVersion }),
   ],
   schema: { types: schemaTypes },
+  // Keep singletons single: no "create new" in the global menu, no delete/
+  // duplicate actions on the document itself.
+  document: {
+    newDocumentOptions: (prev, { creationContext }) =>
+      creationContext.type === "global"
+        ? prev.filter((t) => !singletonIds.includes(t.templateId))
+        : prev,
+    actions: (prev, { schemaType }) =>
+      singletonIds.includes(schemaType)
+        ? prev.filter(
+            ({ action }) =>
+              action !== "delete" &&
+              action !== "duplicate" &&
+              action !== "unpublish"
+          )
+        : prev,
+  },
 });

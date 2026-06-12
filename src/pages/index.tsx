@@ -14,8 +14,14 @@ import { ViewerLocations } from "../components/ViewerLocations";
 import { Client } from "@notionhq/client";
 import { QueryDatabaseResponse } from "@notionhq/client/build/src/api-endpoints";
 import Image from "next/image";
+import { PortableBody } from "../components/PortableBody";
+import {
+  fetchHomeIntro,
+  fetchDraftHomeIntro,
+  HomeIntro,
+} from "../lib/sanity-site-settings";
 
-export default function Index({ posts, tags, pagination, flags }) {
+export default function Index({ flags, homeIntro }) {
   return (
     <>
       <Layout>
@@ -36,21 +42,30 @@ export default function Index({ posts, tags, pagination, flags }) {
                 alt={"Einstein quote"}
               />
             </div>
-            <p>
-              Sometimes I realise I haven't fully grasped certain concepts,
-              technologies and processes. Or simply put:
-              <br />
-              It feels like <strong>"I don't know shite"</strong> about them.
-              <br />
-            </p>
-            <p>
-              I found writing about my learnings, to be one of the most
-              effective methods to learn and retain knowledge.
-              <br />
-              This blog aims to educate myself to close knowledge gaps and{" "}
-              <strong>"know my shite"</strong>.
-            </p>
-            <p>idkshite.com is a reminder that we all start at "not knowing" and eventually get to "knowing a little more". And that's ok. </p>
+            {homeIntro ? (
+              <PortableBody value={homeIntro} />
+            ) : (
+              <>
+                <p>
+                  Sometimes I realise I haven't fully grasped certain concepts,
+                  technologies and processes. Or simply put:
+                  <br />
+                  It feels like <strong>"I don't know shite"</strong> about them.
+                  <br />
+                </p>
+                <p>
+                  I found writing about my learnings, to be one of the most
+                  effective methods to learn and retain knowledge.
+                  <br />
+                  This blog aims to educate myself to close knowledge gaps and{" "}
+                  <strong>"know my shite"</strong>.
+                </p>
+                <p>
+                  idkshite.com is a reminder that we all start at "not knowing"
+                  and eventually get to "knowing a little more". And that's ok.{" "}
+                </p>
+              </>
+            )}
             {flags.length >= 3 ? (
               <div className="flex w-full">
                 <ViewerLocations flags={flags} />
@@ -91,13 +106,22 @@ export default function Index({ posts, tags, pagination, flags }) {
 }
 
 export async function getStaticProps(context: { draftMode?: boolean }) {
+  const draftMode = context.draftMode ?? false;
+  // Drafts (with stega overlays) in preview; published copy otherwise. null when
+  // the singleton is unset, which renders the hardcoded fallback intro.
+  const homeIntro: HomeIntro = draftMode
+    ? await fetchDraftHomeIntro()
+    : await fetchHomeIntro();
+
   return {
     props: {
       flags: await getCountryFlagsWhoVisited(),
-      // Presentation's default landing is "/", so the overlay must connect here
-      // too — even though the home page itself isn't draft-aware.
-      draftMode: context.draftMode ?? false,
+      homeIntro,
+      // Presentation's default landing is "/", so the overlay must connect here.
+      draftMode,
     },
+    // On-demand ISR backstop for published reads; draft reads bypass the cache.
+    ...(draftMode ? {} : { revalidate: 60 }),
   };
 }
 
