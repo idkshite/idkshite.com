@@ -1,5 +1,6 @@
 import { isValidSignature, SIGNATURE_HEADER_NAME } from "@sanity/webhook";
 import type { NextApiRequest, NextApiResponse } from "next";
+import { postListingPaths } from "../../lib/listing-paths";
 
 // Raw body is required for HMAC signature verification.
 export const config = { api: { bodyParser: false } };
@@ -14,10 +15,11 @@ async function readRawBody(req: NextApiRequest): Promise<string> {
 
 // Signed Sanity webhook (Pages Router). Configure a GROQ-powered webhook in
 // Sanity Manage:
-//   filter:     _type == "post"
-//   projection: { "path": "/posts/" + slug.current }
+//   filter:     _type == "post" || _type == "siteSettings"
+//   projection: { "path": select(_type == "siteSettings" => "/", "/posts/" + slug.current) }
 //   secret:     SANITY_REVALIDATE_SECRET
-// On a valid signature, on-demand-revalidates the post path plus the listing.
+// A siteSettings change revalidates "/". A post change revalidates the post page
+// plus every listing that embeds a post title (main list, pagination, tags).
 export default async function handler(
   req: NextApiRequest,
   res: NextApiResponse
@@ -49,11 +51,18 @@ export default async function handler(
   // Absorb Content Lake / CDN eviction lag before revalidating.
   await new Promise((resolve) => setTimeout(resolve, 3000));
 
+  // A post title appears across every listing, so a post change must refresh
+  // them all; the home page ("/") is the only thing a siteSettings change hits.
+  const paths =
+    body.path === "/"
+      ? ["/"]
+      : [body.path, ...(await postListingPaths())].filter(
+          (path, i, all) => all.indexOf(path) === i
+        );
+
   try {
-    await res.revalidate(body.path);
-    // The post must also appear in the list immediately.
-    await res.revalidate("/posts");
-    return res.status(200).json({ revalidated: true, path: body.path });
+    await Promise.all(paths.map((path) => res.revalidate(path)));
+    return res.status(200).json({ revalidated: true, paths });
   } catch (err: any) {
     return res.status(500).json({ message: err.message });
   }

@@ -93,23 +93,16 @@ export function mergePostSources(
   return [...mdx, ...sanity].sort((a, b) => (a.date < b.date ? 1 : -1));
 }
 
-let postCache: Promise<PostContent[]> | undefined;
-
-export function fetchPostContent(
+// No module-level cache: it would persist across ISR regenerations in a warm
+// serverless instance, so a revalidated listing would re-serve stale titles.
+export async function fetchPostContent(
   sources: PostSources = defaultSources
 ): Promise<PostContent[]> {
-  const compute = async () => {
-    const [mdx, sanity] = await Promise.all([
-      sources.loadMdxPosts(),
-      sources.loadSanityPosts(),
-    ]);
-    return mergePostSources(mdx, sanity);
-  };
-  // Only cache the real, default-sourced merge; injected fakes always recompute.
-  if (sources === defaultSources) {
-    return (postCache ??= compute());
-  }
-  return compute();
+  const [mdx, sanity] = await Promise.all([
+    sources.loadMdxPosts(),
+    sources.loadSanityPosts(),
+  ]);
+  return mergePostSources(mdx, sanity);
 }
 
 export async function countPosts(tag?: string): Promise<number> {
