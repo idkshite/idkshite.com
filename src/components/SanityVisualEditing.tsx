@@ -1,15 +1,16 @@
 import { VisualEditing } from "@sanity/visual-editing/next-pages-router";
-import { useLiveMode } from "@sanity/react-loader";
 import { DisableDraftMode } from "./DisableDraftMode";
-import { previewClient } from "../sanity/lib/client";
 
 // Mounted only in Draft Mode (see _app). VisualEditing renders the click-to-edit
-// overlays and refreshes the page when content changes in Presentation;
-// useLiveMode opens the live channel that drives those refreshes. The token on
-// previewClient is server-only, so in the browser this client just listens.
+// overlays and, on each draft save, re-runs getStaticProps so the preview
+// updates automatically (its built-in `router.replace` refresh).
+//
+// Deliberately NO useLiveMode: it flags `livePreviewEnabled`, which makes
+// VisualEditing SKIP that refresh and instead wait for `@sanity/react-loader`
+// useQuery to stream updates. We render through getStaticProps/PortableText (no
+// useQuery) — partly so server-side code highlighting re-runs — so live mode
+// would leave the preview frozen until a manual reload.
 export default function SanityVisualEditing() {
-  useLiveMode({ client: previewClient });
-
   return (
     <>
       <VisualEditing />

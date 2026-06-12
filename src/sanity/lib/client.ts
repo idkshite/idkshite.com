@@ -16,11 +16,9 @@ export const freshClient = client.withConfig({
   token: process.env.SANITY_API_READ_TOKEN,
 });
 
-// Draft-preview reads only. Fresh (no CDN), authenticated, and on the `drafts`
-// perspective so unpublished documents resolve; stega-encodes strings for
-// click-to-edit overlays. The token is server-only (the env var is not
-// NEXT_PUBLIC), so the same instance is safe to hand to the browser's
-// useLiveMode — there it carries no token and only opens the live channel.
+// Draft-preview reads only (server-side: fetchDraftPostBySlug + enable-draft).
+// Fresh (no CDN), authenticated, and on the `drafts` perspective so unpublished
+// documents resolve; stega-encodes strings for click-to-edit overlays.
 // Published reads (client/freshClient) are deliberately left untouched.
 export const previewClient = client.withConfig({
   useCdn: false,
