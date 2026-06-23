@@ -4,7 +4,7 @@ import {mdxjs} from "micromark-extension-mdxjs";
 // `bundler` module resolution blocks this package's internal /lib subpath; the
 // mdast node type is only used loosely here, so alias it locally.
 type Content = any;
-import flattendeep from "lodash.flattendeep";
+import {flattenDeep} from "lodash";
 import {PostFrontMatter} from "../../pages/api/publish/[postSlug]";
 
 type CustomMDXTag = {
@@ -63,7 +63,7 @@ export function convertCustomComponentsToJekyll(
   markdown: string,
   frontMatter: PostFrontMatter
 ) {
-  const flattenedTags: CustomMDXTag[] = flattendeep(
+  const flattenedTags: CustomMDXTag[] = flattenDeep(
     getFileTree(markdown).children.reduce<Content[]>((allTokens, token) => {
       return [...allTokens, getTokenChild(token)];
     }, [])
@@ -221,10 +221,10 @@ function getAttributeValue(attribute) {
 
 function getContent(token) {
   if (!token?.children) return null;
-  const flattenedChildrenWithValue = flattendeep(getTokenChild(token)).filter(
+  const flattenedChildrenWithValue = flattenDeep(getTokenChild(token)).filter(
     (token) => token?.value
   );
-  console.log("fat white", flattendeep(getTokenChild(token)));
+  console.log("fat white", flattenDeep(getTokenChild(token)));
   console.log("flattenedChildrenWithValue", flattenedChildrenWithValue);
 
   return flattenedChildrenWithValue.reduce((content, child) => {

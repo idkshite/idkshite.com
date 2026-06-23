@@ -1,6 +1,7 @@
 import { isValidSignature, SIGNATURE_HEADER_NAME } from "@sanity/webhook";
 import type { NextApiRequest, NextApiResponse } from "next";
 import { postListingPaths } from "../../lib/listing-paths";
+import {uniq} from "lodash";
 
 // Raw body is required for HMAC signature verification.
 export const config = { api: { bodyParser: false } };
@@ -13,13 +14,31 @@ async function readRawBody(req: NextApiRequest): Promise<string> {
   return data;
 }
 
-// Signed Sanity webhook (Pages Router). Configure a GROQ-powered webhook in
-// Sanity Manage:
-//   filter:     _type == "post" || _type == "siteSettings"
-//   projection: { "path": select(_type == "siteSettings" => "/", "/posts/" + slug.current) }
-//   secret:     SANITY_REVALIDATE_SECRET
-// A siteSettings change revalidates "/". A post change revalidates the post page
-// plus every listing that embeds a post title (main list, pagination, tags).
+// The pages a changed document affects. null means "nothing to do" — the
+// webhook has no filter, so unrelated types reach us and should no-op (not
+// error, which Sanity would retry).
+async function affectedPaths(body: {
+  _type?: string;
+  slug?: string;
+}): Promise<string[] | null> {
+  switch (body._type) {
+    case "siteSettings":
+      return ["/"];
+
+    case "post":
+      return body.slug
+        ? uniq([`/posts/${body.slug}`, ...(await postListingPaths())])
+        : await postListingPaths();
+
+    case "author":
+    case "tag":
+      return await postListingPaths();
+
+    default:
+      return null;
+  }
+}
+
 export default async function handler(
   req: NextApiRequest,
   res: NextApiResponse
@@ -44,21 +63,13 @@ export default async function handler(
   }
 
   const body = rawBody.trim() ? JSON.parse(rawBody) : {};
-  if (!body?.path) {
-    return res.status(400).json({ message: "Bad Request: missing path" });
+
+  const paths = await affectedPaths(body);
+  if (!paths) {
+    // Unrelated type (no filter on the webhook). 200 so Sanity treats it as
+    // delivered instead of retrying.
+    return res.status(200).json({ revalidated: false, type: body._type ?? null });
   }
-
-  // Absorb Content Lake / CDN eviction lag before revalidating.
-  await new Promise((resolve) => setTimeout(resolve, 3000));
-
-  // A post title appears across every listing, so a post change must refresh
-  // them all; the home page ("/") is the only thing a siteSettings change hits.
-  const paths =
-    body.path === "/"
-      ? ["/"]
-      : [body.path, ...(await postListingPaths())].filter(
-          (path, i, all) => all.indexOf(path) === i
-        );
 
   try {
     await Promise.all(paths.map((path) => res.revalidate(path)));

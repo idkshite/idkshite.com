@@ -20,5 +20,6 @@ export function getTag(slug: string) {
 }
 
 export function listTags(): TagContent[] {
+  // TODO: Needs to fetch the tags from sanity as well
   return tags.tags;
 }
