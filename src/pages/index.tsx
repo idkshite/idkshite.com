@@ -120,8 +120,6 @@ export async function getStaticProps(context: { draftMode?: boolean }) {
       // Presentation's default landing is "/", so the overlay must connect here.
       draftMode,
     },
-    // On-demand ISR backstop for published reads; draft reads bypass the cache.
-    ...(draftMode ? {} : { revalidate: 60 }),
   };
 }
 

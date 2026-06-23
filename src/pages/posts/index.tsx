@@ -46,7 +46,5 @@ export const getStaticProps: GetStaticProps = async (context) => {
       // listing inside Presentation (listing stays published-only).
       draftMode: context.draftMode ?? false,
     },
-    // Time-based backstop so newly published Sanity posts surface in the list.
-    revalidate: 60,
   };
 };
