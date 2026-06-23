@@ -1,12 +1,12 @@
 import { createClient } from "next-sanity";
 import { apiVersion, dataset, projectId, studioUrl } from "../env";
 
-// Runtime reads hit the CDN (fast, may lag a few seconds behind publishes).
 export const client = createClient({
   projectId,
   dataset,
   apiVersion,
   useCdn: true,
+  // perspective: "published" is default
 });
 
 // Build-time (getStaticProps/Paths) and webhook reads must bypass the CDN and
