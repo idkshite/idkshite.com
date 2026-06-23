@@ -145,9 +145,5 @@ export const getStaticProps: GetStaticProps = async (context) => {
       body: highlightBodyCode(doc.body ?? []),
       draftMode,
     },
-    // On-demand ISR backstop for published pages. Draft pages are
-    // request-rendered (draft mode bypasses the static cache), so revalidate
-    // is irrelevant there.
-    ...(draftMode ? {} : { revalidate: 60 }),
   };
 };

@@ -51,8 +51,6 @@ export const getStaticProps: GetStaticProps = async ({ params }) => {
       tags,
       pagination,
     },
-    // Time-based backstop so newly published Sanity posts surface in the list.
-    revalidate: 60,
   };
 };
 
